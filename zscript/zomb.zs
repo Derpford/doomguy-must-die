@@ -78,6 +78,7 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
         Pain:
             POSS G 3 Thrust(-5, invoker.angle);
             POSS G 5 A_Pain();
+            POSS E 3 EndAttack();
             Goto See;
         
         Death:

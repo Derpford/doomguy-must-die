@@ -99,7 +99,7 @@ class FlameImp : DMDMonster replaces DoomImp {
                 invoker.Thrust(5,ang);
             }
             TROO H 3 A_Pain;
-            TROO H 5;
+            TROO H 5 EndAttack();
             Goto See;
         Death:
             TROO H 8 A_Scream;

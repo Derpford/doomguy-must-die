@@ -50,18 +50,23 @@ class ShotgunThug : DMDMonster replaces ShotgunGuy {
             // Barrel time!
             if (barrel) {
                 if (target.Vec3To(barrel).length() < 320) {
+                    console.printf("Shotgun Thug: [evil laughter]");
                     return ResolveState("BarrelShot");
                 } else {
+                    console.printf("Shotgun Thug: 'You cannot hide!'");
                     return ResolveState("Slug");
                 }
             } else {
+                console.printf("Shotgun Thug: 'BARREL!'");
                 return ResolveState("Barrel");
             }
         } else {
             // Check range.
             if (Vec3To(target).length() < 320) {
+                console.printf("Shotgun Thug: 'Die, worm!'");
                 return ResolveState("Blast");
             } else {
+                console.printf("Shotgun Thug: 'You cannot hide!'");
                 return ResolveState("Slug");
             }
         }
@@ -102,16 +107,23 @@ class ShotgunThug : DMDMonster replaces ShotgunGuy {
             SPOS G 5 A_StartSound("shotguy/pain");
             SPOS G 5 Aim();
             SPOS D 10 ThrowBarrel();
-            SPOS E 10;
+            SPOS E 10 EndAttack();
             Goto See;
 
         BarrelShot:
             SPOS E 6 A_StartSound("shotguy/sight");
             SPOS E 8 A_Face(barrel,0,0,flags:FAF_MIDDLE);
-            SPOS F 5 FireSlug();
+            SPOS F 5 Bright FireSlug();
             SPOS E 10;
             Goto See;
 
+        Pain:
+            SPOS G 4;
+            SPOS H 3 A_Pain();
+            SPOS E 6;
+            SPOS F 5 Bright FireBuck();
+            SPOS E 10 EndAttack();
+            Goto See;
         
         Death:
             SPOS G 4;
