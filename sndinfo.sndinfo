@@ -1,1 +1,7 @@
 $alias misc/thud player/male/fist
+
+$alias zerker/rev weapons/sawhit
+$pitchset zerker/rev 0.9
+$attenuation zerker/rev 0.3
+$alias zerker/saw weapons/sawup
+$pitchset zerker/saw 0.8
