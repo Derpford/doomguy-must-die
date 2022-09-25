@@ -61,7 +61,9 @@ class DMDMonster : Actor abstract {
     action void EndAttack() {
         // Give back the attack token we took.
         invoker.TakeInventory("AttackToken",1);
-        invoker.AttackTarget.GiveInventory("AttackToken",1);
+        if (invoker.AttackTarget && invoker.AttackTarget != self) {
+            invoker.AttackTarget.GiveInventory("AttackToken",1);
+        }
         invoker.AttackTarget = invoker; // Clear our attack target.
     }
 
