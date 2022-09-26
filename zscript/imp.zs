@@ -100,6 +100,7 @@ class FlameImp : DMDMonster replaces DoomImp {
             TROO E 6 A_StartSound("imp/sight");
             TROO E 6 Aim();
             TROO F 6 Vel3DFromAngle(20,angle,pitch-15);
+            TROO E 6 EndAttack();
             Goto See;
         
         Pain:
