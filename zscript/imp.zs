@@ -51,7 +51,7 @@ class FlameImp : DMDMonster replaces DoomImp {
 
     override void Tick() {
         super.Tick();
-        if (!bDECEASED) {
+        if (!bCORPSE) {
             double ang = GetAge() * 5;
             double zoff = 32 + sin(ang) * 4;
             if (ball1) { ball1.Warp(self,40,zofs:zoff,angle:ang); }
