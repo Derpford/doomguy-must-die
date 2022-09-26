@@ -87,7 +87,14 @@ class AttackToken : Inventory {
     default {
         Inventory.Amount 1;
         Inventory.MaxAmount 5; 
-        Inventory.InterHubAmount 0; // Event handler takes care of giving the player attack tokens.
+        +Inventory.KEEPDEPLETED;
+    }
+
+    override void Travelled() {
+        if (owner) {
+            owner.TakeInventory("AttackToken",5);
+            owner.GiveInventory("AttackToken",skill+1);
+        }
     }
 }
 
