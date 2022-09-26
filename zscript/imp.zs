@@ -23,11 +23,12 @@ class FlameImp : DMDMonster replaces DoomImp {
     }
 
     override State ChooseAttack() {
-        if (ball1 || ball2 || ball3) {
-            return ResolveState("Fireball");
-        }
         if (random(0,60) >= health) {
-            return ResolveState("FireOrbit");
+            if (ball1 || ball2 || ball3) {
+                return ResolveState("Lunge");
+            } Else {
+                return ResolveState("FireOrbit");
+            }
         } else {
             return ResolveState("Fireball");
         }
@@ -50,11 +51,18 @@ class FlameImp : DMDMonster replaces DoomImp {
 
     override void Tick() {
         super.Tick();
-        double ang = GetAge() * 5;
-        double zoff = 32 + sin(ang) * 4;
-        if (ball1) { ball1.Warp(self,40,zofs:zoff,angle:ang); }
-        if (ball2) { ball2.Warp(self,40,zofs:zoff,angle:ang + 120); }
-        if (ball3) { ball3.Warp(self,40,zofs:zoff,angle:ang + 240); }
+        if (!bDECEASED) {
+            double ang = GetAge() * 5;
+            double zoff = 32 + sin(ang) * 4;
+            if (ball1) { ball1.Warp(self,40,zofs:zoff,angle:ang); }
+            if (ball2) { ball2.Warp(self,40,zofs:zoff,angle:ang + 120); }
+            if (ball3) { ball3.Warp(self,40,zofs:zoff,angle:ang + 240); }
+        } else {
+            // Fireballs fly off when imp is dead
+            if (ball1) { ball1.VelFromAngle(ball1.speed,AngleTo(ball1)); }
+            if (ball2) { ball2.VelFromAngle(ball2.speed,AngleTo(ball2)); }
+            if (ball3) { ball3.VelFromAngle(ball3.speed,AngleTo(ball3)); }
+        }
     }
 
     states {
@@ -87,6 +95,12 @@ class FlameImp : DMDMonster replaces DoomImp {
             TROO F 10 FireOrbit();
             TROO F 10 EndAttack();
             Goto See; 
+
+        Lunge:
+            TROO E 6 A_StartSound("imp/sight");
+            TROO E 6 Aim();
+            TROO F 6 Vel3DFromAngle(20,angle,pitch-15);
+            Goto See;
         
         Pain:
             TROO H 2 {
