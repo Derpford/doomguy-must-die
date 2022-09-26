@@ -24,7 +24,8 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
     }
 
     override State ChooseAttack() {
-        if (Vec3To(target).length() < 256 && frandom(0,1) < .3) {
+        double dist = Vec3To(target).length();
+        if (frandom(0,1) * dist >= 256) {
             return ResolveState("Grenade");
         } else {
             return ResolveState("BurstShot");
@@ -38,7 +39,7 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
 
     void FireGrenade() {
         A_StartSound("player/male/fist");
-        Shoot("GruntNade");
+        A_SpawnItemEX("GruntNade",32,zofs:24,xvel:5,zvel:10);
     }
 
     states {
@@ -135,23 +136,43 @@ class GruntBullet : Actor {
 }
 
 class GruntNade : Actor {
-    mixin ParticleTracer;
+    mixin RadiusPush;
     default {
-        Projectile;
+        // Projectile;
+        +SHOOTABLE;
+        +SOLID;
+        Height 10;
+        Radius 10;
+        Health 10;
         -NOGRAVITY;
         Speed 25;
-        DamageFunction (5);
+        // DamageFunction (5);
         Obituary "%o got bonked by a grunt's concussion grenade. Humiliating.";
+    }
+
+    override void Tick() {
+        super.Tick();
+        ThinkerIterator it = ThinkerIterator.Create("PlayerPawn");
+        Actor mo;
+        while (mo = Actor(it.next())) {
+            if (Vec3To(mo).length() <= 128) {
+                self.A_Die();
+                break;
+            }
+        }
     }
 
     states {
         Spawn:
-            BOMB A 1 SpawnTrail(8,12,"333333",spread:(6,6,6));
+            BOMB A 35 {
+                for (int i = 0; i < 360; i += 60) {
+                    A_SpawnParticle("FF0000",SPF_FULLBRIGHT|SPF_RELPOS,15,8,i,8,zoff:12);
+                }
+            }
             Loop;
         Death:
             BOMB A 10;
-            PLSE A 0 A_RadiusThrust(500,256,RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE,256);
-            PLSE A 0 A_RadiusThrust(100,256,RTF_AFFECTSOURCE|RTF_NOIMPACTDAMAGE|RTF_THRUSTZ,256);
+            PLSE A 0 RadiusPush(20,256,-15);
             PLSE ABCDE 4 Bright;
             TNT1 A -1;
             Stop;

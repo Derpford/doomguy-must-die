@@ -1,4 +1,5 @@
 class Cyberzerker : DMDMonster replaces Demon {
+    mixin RadiusPush;
     // A demented zombie with some kind of zappy melee weapon strapped to its arm.
     // 1. Performs 3 dashes, doing 20 damage to anything it passes by and popping them into the air slightly.
     // 2. Charges briefly, then uppercuts for 40 damage, launching itself and everything nearby into the air.
@@ -75,28 +76,7 @@ class Cyberzerker : DMDMonster replaces Demon {
     }
 
     action void Uppercut() {
-        ThinkerIterator it = ThinkerIterator.Create("Actor");
-        Actor mo;
-        while (mo = Actor(it.next())) {
-            if (mo == self || !mo.bSHOOTABLE) {
-                continue;
-            }
-
-            Vector3 dv = Vec3To(mo);
-            Vector3 dir = dv.unit();
-            Double dist = dv.length();
-
-            if (dist > 260) {
-                continue;
-            } 
-
-            // Now we spawn some zappy particles and do damage.
-            for(int i = 0; i < dist; i += random(3,6)) {
-                A_SpawnParticle("00FFFF",SPF_FULLBRIGHT,35,frandom(3,6),0,dir.x * i, dir.y * i, dir.z * i);
-            }
-            mo.DamageMobj(self,self,20,"electric");
-            mo.Vel3DFromAngle(20,AngleTo(mo,true),-60);
-        }
+        RadiusShock(20,260,-60,40,"electric");
     }
 
     states {

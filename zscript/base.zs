@@ -1,3 +1,52 @@
+mixin class RadiusPush {
+    // A handy function that tosses targets with the specified pitch in an AoE.
+
+    void RadiusPush(double speed, double radius, double pitch) {
+        ThinkerIterator it = ThinkerIterator.Create("Actor");
+        Actor mo;
+        while (mo = Actor(it.next())) {
+            if (mo == self || !mo.bSHOOTABLE) {
+                continue;
+            }
+
+            Vector3 dv = Vec3To(mo);
+            Vector3 dir = dv.unit();
+            Double dist = dv.length();
+
+            if (dist > radius) {
+                continue;
+            } 
+            mo.Vel3DFromAngle(speed,AngleTo(mo,true),pitch);
+        }
+    }
+
+    action void RadiusShock(double speed, double radius, double pitch, int dmg, Name mod) {
+        // Does damage too! And spawns particles!
+        ThinkerIterator it = ThinkerIterator.Create("Actor");
+        Actor mo;
+        while (mo = Actor(it.next())) {
+            if (mo == invoker || !mo.bSHOOTABLE) {
+                continue;
+            }
+
+            Vector3 dv = Vec3To(mo);
+            Vector3 dir = dv.unit();
+            Double dist = dv.length();
+
+            if (dist > radius) {
+                continue;
+            } 
+
+            // Now we spawn some zappy particles and do damage.
+            for(int i = 0; i < dist; i += random(3,6)) {
+                A_SpawnParticle("00FFFF",SPF_FULLBRIGHT,35,frandom(3,6),0,dir.x * i, dir.y * i, dir.z * i);
+            }
+            mo.DamageMobj(invoker,invoker,dmg,mod);
+            mo.Vel3DFromAngle(speed,AngleTo(mo,true),pitch);
+        }
+    }
+}
+
 class DMDMonster : Actor abstract {
     // The base class for all Doomguy Must Die enemies.
     // This holds some key bits of stuff, including the Attack Token System details.
