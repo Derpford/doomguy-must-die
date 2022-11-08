@@ -15,10 +15,10 @@ class FlameImp : DMDMonster replaces DoomImp {
         PainChance 200;
         Monster;
         +FLOORCLIP;
-        SeeSound "imp/sight";
-		PainSound "imp/pain";
-		DeathSound "imp/death";
-		ActiveSound "imp/active";
+        SeeSound "monster/hlnsit";
+		PainSound "monster/hlnpai";
+		DeathSound "monster/hlndth";
+		ActiveSound "monster/hlnact";
         Tag "Flame Imp";
     }
 
@@ -47,102 +47,105 @@ class FlameImp : DMDMonster replaces DoomImp {
         invoker.ball1.target = invoker;
         invoker.ball2.target = invoker;
         invoker.ball3.target = invoker;
-    }
+        invoker.ball1.angle = angle;
+        invoker.ball2.angle = angle + 120;
+        invoker.ball3.angle = angle + 240;
 
-    override void Tick() {
-        super.Tick();
-        if (!bCORPSE) {
-            double ang = GetAge() * 5;
-            double zoff = 32 + sin(ang) * 4;
-            if (ball1) { ball1.Warp(self,40,zofs:zoff,angle:ang); }
-            if (ball2) { ball2.Warp(self,40,zofs:zoff,angle:ang + 120); }
-            if (ball3) { ball3.Warp(self,40,zofs:zoff,angle:ang + 240); }
-        } else {
-            // Fireballs fly off when imp is dead
-            if (ball1) { ball1.VelFromAngle(ball1.speed,AngleTo(ball1)); }
-            if (ball2) { ball2.VelFromAngle(ball2.speed,AngleTo(ball2)); }
-            if (ball3) { ball3.VelFromAngle(ball3.speed,AngleTo(ball3)); }
-        }
     }
 
     states {
         Spawn:
-            TROO AB Random(8,12) A_Look();
+            HELN AB Random(8,12) A_Look();
             Loop;
         
         See:
-            TROO ABCD 3 A_Chase();
+            HELN ABCDEF 3 A_Chase();
             Loop;
         
         Missile:
-            TROO A 3 StartAttack();
+            HELN A 3 StartAttack();
             Goto See;
         
         Fireball:
-            TROO E 4 A_StartSound("imp/sight");
-            TROO E 4 Aim();
-            TROO EEEE 2 Aim(5,1);
-            TROO F 4;
-            TROO G 5 FireBall();
-            TROO EEE 2 Aim(5,1);
-            TROO F 4;
-            TROO G 5 FireBall();
-            TROO G 10 EndAttack();
+            HELN G 3 Bright A_StartSound("monster/hlnatk",2);
+            HELN H 3 Bright;
+            HELN I 3 Bright Aim();
+            HELN J 3 Bright;
+            HELN JJJJ 2 Aim(5,1);
+            HELN K 4;
+            HELN L 5 FireBall();
+            HELN JJJ 2 Aim(5,1);
+            HELN K 4;
+            HELN L 5 FireBall();
+            HELN L 10 EndAttack();
             Goto See;
         
         FireOrbit:
-            TROO E 10 A_StartSound("imp/pain");
-            TROO F 10 FireOrbit();
-            TROO F 10 EndAttack();
+            HELN G 2 Bright A_StartSound("monster/hlnpai",2);
+            HELN HIJK 2 Bright;
+            HELN L 10 FireOrbit();
+            HELN L 10 EndAttack();
             Goto See; 
 
         Lunge:
-            TROO E 6 A_StartSound("imp/sight");
-            TROO E 6 Aim();
-            TROO F 6 Vel3DFromAngle(20,angle,pitch-15);
-            TROO E 6 EndAttack();
+            HELN B 6 A_StartSound("monster/hlnpai",2);
+            HELN B 6 Aim();
+            HELN F 6 Vel3DFromAngle(20,angle,pitch-15);
+            HELN E 6 EndAttack();
             Goto See;
         
         Pain:
-            TROO H 2 {
+            HELN M 4;
+            HELN M 2 {
                 double ang = invoker.angle;
+                state dodge;
                 if (frandom(0,1) > .5) {
                     ang += 90;
+                    dodge = ResolveState("DodgeLeft");
                 } else {
                     ang -= 90;
+                    dodge = ResolveState("DodgeRight");
                 }
                 invoker.Thrust(5,ang);
+                return dodge;
             }
-            TROO H 3 A_Pain;
-            TROO H 5 EndAttack();
+        DodgeLeft:
+            HELN A 5 A_Pain();
+            Goto PainEnd;
+        DodgeRight:
+            HELN D 5 A_Pain();
+            Goto PainEnd;
+        PainEnd:
+            HELN H 5 EndAttack();
             Goto See;
         Death:
-            TROO H 8 A_Scream;
-            TROO I 4;
-            TROO J 4;
-            TROO K 3;
-            TROO L 3 A_NoBlocking;
-            TROO M 1 A_StartSound("misc/thud");
-            TROO M -1;
+            HELN M 8 A_Scream;
+            HELN N 4;
+            HELN O 4;
+            HELN P 3;
+            HELN Q 3 A_NoBlocking;
+            HELN R 1 A_StartSound("misc/thud");
+            HELN S 1;
+            HELN T -1;
             Stop;
         XDeath:
-            TROO H 8;
-            TROO N 4;
-            TROO O 3 A_XScream;
-            TROO P 3;
-            TROO Q 3 A_NoBlocking;
-            TROO RST 3;
-            TROO U -1;
+            HELN M 8;
+            HELN N 4;
+            HELN U 3 A_XScream;
+            HELN V 3;
+            HELN W 3 A_NoBlocking;
+            HELN XYZ 3;
+            HEL2 ABC 2;
+            HEL2 C -1;
             Stop;
         Raise:
-            TROO ML 8 A_Pain();
-            TROO KJI 6;
+            HELN SR 8 A_Pain();
+            HELN QPOMN 6;
             Goto See;
     }
 }
 
 class ImpFireball : Actor {
-    mixin ParticleTracer;
 
     action void Smoke() {
         A_SpawnParticle("333333",SPF_RELATIVE|SPF_FULLBRIGHT,35,8,0,-8,frandom(-8,8),frandom(-8,8));
@@ -161,13 +164,13 @@ class ImpFireball : Actor {
 
     states {
         Spawn:
-            BAL1 AAABBB 1 Smoke();
+            HLBL AAABBB 1 Smoke();
             Loop;
         
         Death:
-            BAL1 C 6 Bright A_StartSound("imp/shotx");
-            BAL1 D 7 Bright;
-            BAL1 E 8 Bright;
+            HLBL C 1 Bright A_StartSound("imp/shotx");
+            HLBL DEFGHI 1 Bright;
+            HLBL JKLMN 2 Bright;
             Stop;
     }
 }
@@ -178,12 +181,33 @@ class ImpOrball : ImpFireball {
         ReactionTime 175;
     }
 
+    override void Tick() {
+        Super.Tick();
+        if(InStateSequence(curstate,ResolveState("Spawn"))) {
+            if(target) {
+                // Orbit our owner!
+                angle += 5;
+                VelFromAngle(1,angle+90);
+                Warp(target,40,zofs:32,angle:angle,flags:WARPF_ABSOLUTEANGLE|WARPF_INTERPOLATE);
+            } else {
+                // Owner's dead. Fly off into the distance!
+                bSPRITEANGLE = false;
+                VelFromAngle(speed,angle);
+            }
+        }
+    }
+
     states {
         Spawn:
-            BAL1 AAABBB 1 {
+            HLBL AAABBB 1 {
                 A_CountDown();
                 Smoke();
             }
             Loop;
+        Death:
+            HLBL C 1 Bright A_StartSound("imp/shotx");
+            HLBL DEFGHI 1 Bright;
+            HLBL JKLMN 2 Bright;
+            Stop;
     }
 }

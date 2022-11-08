@@ -1,1 +1,9 @@
 Cyber Zombie sprites by cybermeme: https://forum.zdoom.org/viewtopic.php?t=63923
+
+Hellion credits:
+	Code: Eriance, Ghastly (ZScript conversion) (unused)
+	GLDefs: Keksdose, Sandypaper (Brightmaps)
+	Sounds: Id Software
+	Sprites: Id Software
+	Sprite Edit: Eriance
+	Idea Base: Doom 2 Arch-Vile

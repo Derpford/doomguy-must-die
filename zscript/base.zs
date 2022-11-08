@@ -125,7 +125,11 @@ class DMDMonster : Actor abstract {
         if (it) {
             it.target = invoker;
             if (speed == 0.0) {speed = it.speed;}
-            it.Vel3DFromAngle(speed,invoker.angle+aoffs.x+frandom(-spread.x,spread.x),invoker.pitch+aoffs.y+frandom(-spread.y,spread.y));
+            double ang = invoker.angle+aoffs.x+frandom(-spread.x,spread.x);
+            double pit = invoker.pitch+aoffs.y+frandom(-spread.y,spread.y);
+            it.Vel3DFromAngle(speed,ang,pit);
+            it.angle = ang;
+            it.pitch = pit;
         }
         return it;
     }
