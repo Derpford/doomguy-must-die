@@ -7,3 +7,8 @@ Hellion credits:
 	Sprites: Id Software
 	Sprite Edit: Eriance
 	Idea Base: Doom 2 Arch-Vile
+	
+Pyropork credits:
+	Code: Conejo
+	Sounds: Half-Life 1, DooM 2, Left4Dead 2
+	Sprites: Stopsignal, Conejo
