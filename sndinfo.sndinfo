@@ -25,6 +25,8 @@ PPorkAct1 "sounds/porkchop/BC_IDLE1"
 PPorkAct2 "sounds/porkchop/BC_IDLE2"
 PPorkAct3 "sounds/porkchop/BC_IDLE3"
 
+PPork/Launch "sounds/porkchop/PROXFIRE"
+
 $Random PPork/Pai { PPorkPai1 PPorkPai2 PPorkPai3 PPorkPai4 }
 PPorkPai1 "sounds/porkchop/BC_PAIN1"
 PPorkPai2 "sounds/porkchop/BC_PAIN2"

@@ -21,6 +21,7 @@ class Porkchop : DMDMonster replaces Fatso {
         ActiveSound "PPork/Act";
         PainSound "PPork/Pai";
         DeathSound "PPork/Ded";
+        Obituary "%o was incinerated by a Porkchop.";
     }
 
     override State ChooseAttack() {
@@ -33,18 +34,18 @@ class Porkchop : DMDMonster replaces Fatso {
     }
 
     void FireSmog() {
-        A_StartSound("weapons/grenlf");
-        Shoot("SmogCanister",30,aoffs:(0,30));
+        A_StartSound("PPork/Launch");
+        Shoot("SmogCanister",40,aoffs:(0,30));
     }
 
     void FireBallSides() {
-        A_StartSound("fatso/attack");
+        A_StartSound("weapons/rocklf");
         Shoot("PorkFireBall",20,aoffs:(45,15));
         Shoot("PorkFireBall",20,aoffs:(-45,15));
     }
 
     void FireBallMid() {
-        A_StartSound("fatso/attack");
+        A_StartSound("weapons/rocklf");
         Shoot("PorkFireBall",20,aoffs:(20,15));
         Shoot("PorkFireBall",20,aoffs:(-20,15));
     }
@@ -80,6 +81,7 @@ class Porkchop : DMDMonster replaces Fatso {
         
         Pain:
             PPRK G 8 A_Pain();
+            PPRK E 4 EndAttack();
             Goto See;
         
         Death:
@@ -101,7 +103,7 @@ class PorkFireball : Actor {
         BounceType "Hexen";
         BounceFactor .8; // Bounces for a while, but not forever!
         BounceCount 8;
-        Obituary "%o was incinerated by a Porkchop.";
+        DeathSound "fatso/shotx";
     }
 
     states {
@@ -206,7 +208,7 @@ class SmogCloud : Actor {
             RSMK ABCDE random(2,4) A_FadeOut(0.08);
             Loop;
         Death:
-            MISL BCD 6 Bright A_Explode(24,128,XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
+            MISL BCD 6 Bright A_Explode(24,128,XF_NOTMISSILE|XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
             TNT1 A -1;
             Stop;
     }

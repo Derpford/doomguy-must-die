@@ -12,3 +12,5 @@ Pyropork credits:
 	Code: Conejo
 	Sounds: Half-Life 1, DooM 2, Left4Dead 2
 	Sprites: Stopsignal, Conejo
+
+Pyropork grenade launcher sound credited to iD Software
