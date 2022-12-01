@@ -35,3 +35,20 @@ PPorkPai4 "sounds/porkchop/BC_PAIN4"
 
 PPork/Ded "sounds/porkchop/BC_DIE1"
 PPork/AirEffect "sounds/porkchop/SSSSSSSS"
+
+// Terminator
+monster/termsit tsight
+monster/termpin tpain1
+monster/termdth tdeath
+monster/brufir dsbrufir
+weapons/hellex dshellex
+
+$random Terminator/termact { termact1 termact2 }
+termact1		dsteract
+termact2		dsteact2
+$random Terminator/terstepA { terstep1 terstep2 }
+terstep1		 dststep1
+terstep2		 dststep2
+Terminator/terstepB dststep3
+Terminator/tershotA dstshot1
+Terminator/tershotB dstshot2

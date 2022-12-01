@@ -14,3 +14,11 @@ Pyropork credits:
 	Sprites: Stopsignal, Conejo
 
 Pyropork grenade launcher sound credited to iD Software
+
+Soulborg projectile sprites credited to Vader
+
+Terminator credits:
+	Code: Vader, Ghastly (ZScript conversion) (unused)
+	GLDefs: Dreadopp, Sandypaper (Brightmaps)
+	Sounds: Id Software, Blizzard Entertainment, Vader
+	Sprites: Vader, Eriance (cannon base)
