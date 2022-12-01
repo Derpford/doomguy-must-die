@@ -4,7 +4,7 @@ class AttackTokenHandler : EventHandler {
     override void WorldThingSpawned(WorldEvent e) {
         let plr = PlayerPawn(e.Thing);
         if (plr) {
-            console.printf("Skill level: %d",skill+1);
+            // console.printf("Skill level: %d",skill+1);
             plr.GiveInventory("AttackToken",skill+1);
         }
     }
