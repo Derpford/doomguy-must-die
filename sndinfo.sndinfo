@@ -16,20 +16,20 @@ monster/hlnexp                  "sounds/hellion/dshlnexp.ogg"
 
 // Porkchop
 $Random PPork/See { PPorkSee1 PPorkSee2 PPorkSee3 }
-PPorkSee1 BC_SEE1
-PPorkSee2 BC_SEE2
-PPorkSee3 BC_SEE3
+PPorkSee1 "sounds/porkchop/BC_SEE1"
+PPorkSee2 "sounds/porkchop/BC_SEE2"
+PPorkSee3 "sounds/porkchop/BC_SEE3"
 
 $Random PPork/Act { PPorkAct1 PPorkAct2 PPorkAct3 }
-PPorkAct1 BC_IDLE1
-PPorkAct2 BC_IDLE2
-PPorkAct3 BC_IDLE3 
+PPorkAct1 "sounds/porkchop/BC_IDLE1"
+PPorkAct2 "sounds/porkchop/BC_IDLE2"
+PPorkAct3 "sounds/porkchop/BC_IDLE3"
 
 $Random PPork/Pai { PPorkPai1 PPorkPai2 PPorkPai3 PPorkPai4 }
-PPorkPai1 BC_PAIN1
-PPorkPai2 BC_PAIN2
-PPorkPai3 BC_PAIN3
-PPorkPai4 BC_PAIN4
+PPorkPai1 "sounds/porkchop/BC_PAIN1"
+PPorkPai2 "sounds/porkchop/BC_PAIN2"
+PPorkPai3 "sounds/porkchop/BC_PAIN3"
+PPorkPai4 "sounds/porkchop/BC_PAIN4"
 
-PPork/Ded BC_DIE1
-PPork/AirEffect SSSSSSSS
+PPork/Ded "sounds/porkchop/BC_DIE1"
+PPork/AirEffect "sounds/porkchop/SSSSSSSS"
