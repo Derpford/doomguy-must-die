@@ -53,6 +53,7 @@ class DMDMonster : Actor abstract {
 
     default {
         +DOHARMSPECIES; // Infighting for days!
+        Monster;
     }
 
     Actor AttackTarget; // Who did we take an attack token from?

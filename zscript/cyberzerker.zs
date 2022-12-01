@@ -14,7 +14,6 @@ class Cyberzerker : DMDMonster replaces Demon {
         Speed 12; // Watch out, this one's a speed demon.
         Mass 200; // It's not as heavy as the original.
         PainChance 180;
-        Monster;
         +FLOORCLIP;
         SeeSound "demon/sight";
 		AttackSound "demon/melee";

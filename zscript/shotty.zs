@@ -13,7 +13,6 @@ class ShotgunThug : DMDMonster replaces ShotgunGuy {
         Mass 150; // Slightly heavier.
         Speed 10; // Just as fast as the zombie grunt.
         PainChance 200; // Less flinchy than the grunt, more flinchy than normal.
-        Monster;
 		+FLOORCLIP
 		SeeSound "shotguy/sight";
 		AttackSound "shotguy/attack";

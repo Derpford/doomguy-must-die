@@ -10,7 +10,6 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
         Height 56;
         Speed 10; // Slightly faster, too!
         PainChance 220; // Slightly easier to flinch, though.
-        Monster;
         +FLOORCLIP;
         SeeSound "grunt/sight";
         AttackSound "grunt/attack";

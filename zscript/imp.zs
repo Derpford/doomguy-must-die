@@ -13,7 +13,6 @@ class FlameImp : DMDMonster replaces DoomImp {
         Height 56;
         Speed 8;
         PainChance 200;
-        Monster;
         +FLOORCLIP;
         SeeSound "monster/hlnsit";
 		PainSound "monster/hlnpai";
