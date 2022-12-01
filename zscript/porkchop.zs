@@ -34,14 +34,19 @@ class Porkchop : DMDMonster replaces Fatso {
 
     void FireSmog() {
         A_StartSound("weapons/grenlf");
+        Shoot("SmogCanister",30,aoffs:(0,30));
     }
 
     void FireBallSides() {
         A_StartSound("fatso/attack");
+        Shoot("PorkFireBall",20,aoffs:(45,15));
+        Shoot("PorkFireBall",20,aoffs:(-45,15));
     }
 
     void FireBallMid() {
         A_StartSound("fatso/attack");
+        Shoot("PorkFireBall",20,aoffs:(20,15));
+        Shoot("PorkFireBall",20,aoffs:(-20,15));
     }
 
     states {
@@ -73,6 +78,136 @@ class Porkchop : DMDMonster replaces Fatso {
             PPRK E 8 EndAttack();
             Goto See;
         
+        Pain:
+            PPRK G 8 A_Pain();
+            Goto See;
+        
+        Death:
+            PPRK G 6 A_Pain();
+            PPRK H 5 A_Scream();
+            PPRK I 5 A_NoBlocking();
+            PPRK JKLM 4;
+            PPRK M -1;
+            Stop;
+    }
+}
 
+class PorkFireball : Actor {
+    // Bouncy exploding projectile.
+    default {
+        PROJECTILE;
+        // DamageFunction (20);
+        -NOGRAVITY;
+        BounceType "Hexen";
+        BounceFactor .8; // Bounces for a while, but not forever!
+        BounceCount 8;
+        Obituary "%o was incinerated by a Porkchop.";
+    }
+
+    states {
+        Spawn:
+            FYRE AB 3 Bright A_SpawnItem("PorkFireTrail");
+            Loop;
+        Death:
+            FIRE A 3 Bright A_Explode(64,64,damagetype:"Fire");
+            FIRE BCDEFGH 3 Bright;
+            TNT1 A -1;
+            Stop;
+    }
+}
+
+class PorkFireTrail : Actor {
+    // Fancy!
+    default {
+        +NOINTERACTION;
+    }
+
+    states {
+        Spawn:
+            FYRE AB 4 A_FadeOut();
+            Loop;
+    }
+}
+
+class SmogCanister : Actor {
+    // Spits out smog until it takes enough damage to explode.
+    double smogangle;
+    int deathtimer;
+    default {
+        +SHOOTABLE;
+        +NOBLOOD;
+        Radius 8;
+        Height 12;
+        Health 50; 
+    }
+
+    void SpawnSmog() {
+        double offs = 40;
+        double vel = 4;
+        smogangle = (smogangle + 10) % 360;
+        A_SpawnItemEX("SmogCloud",offs,zofs:offs,xvel:vel,angle:SmogAngle);
+        A_SpawnItemEX("SmogCloud",offs,zofs:offs,xvel:vel,angle:SmogAngle+180);
+    }
+
+    state FireDeath() {
+        A_Explode(5,128,XF_NOTMISSILE,fulldamagedistance:128,damagetype:"Fire");
+        A_StartSound("PPork/AirEffect",1,CHANF_NOSTOP);
+        deathtimer += 1;
+        if (deathtimer > 10) {
+            return ResolveState("RealDeath");
+        } else {
+            return ResolveState(null);
+        }
+    }
+
+    states {
+        Spawn:
+            ROCK A 10 SpawnSmog();
+            Loop;
+        Death:
+            ROCK A 5 SpawnSmog();
+            ROCK A 0 FireDeath();
+            Loop;
+        RealDeath:
+            MISL B 8 Bright A_StartSound("weapons/rocklx");
+            MISL C 7 Bright;
+            MISL D 6 Bright;
+            TNT1 A -1;
+            Stop;
+    }
+}
+
+class SmogCloud : Actor {
+    // Smog clouds ignite if they take damage,
+    // but they're non-solid, so AoE weapons are what you need.
+    default {
+        +SHOOTABLE;
+        +NOBLOOD;
+        +NOGRAVITY;
+        RenderStyle "Translucent";
+        Alpha 0.8;
+        Health 5;
+        Scale 3;
+        Radius 64;
+        Height 32;
+        Obituary "%o was made into Porkchop sandwiches.";
+    }
+
+    override int DamageMobj(Actor inf, Actor src, int dmg, Name mod, int flags, double ang) {
+        if (flags & DMG_EXPLOSION) {
+            return super.DamageMobj(inf,src,dmg,mod,flags,ang);
+        } else {
+            return 0;
+        }
+    }
+
+    states {
+        Spawn:
+            RSMK ABCDE random(2,4) A_FadeOut(0.08);
+            Loop;
+        Death:
+            MISL BCD 6 Bright A_Explode(24,128,XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
+            TNT1 A -1;
+            Stop;
     }
 }
