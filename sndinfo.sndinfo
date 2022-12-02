@@ -52,3 +52,34 @@ terstep2		 dststep2
 Terminator/terstepB dststep3
 Terminator/tershotA dstshot1
 Terminator/tershotB dstshot2
+
+// Soulborg
+//Nail Sounds
+Weapons/NailFire	DSNLFIRE
+Weapons/Nailhit		DSNLIMPD
+Weapons/Nailhitbleed	DSNLIMPL
+Weapons/NailFlight	DSNLFLIT
+
+
+//Nail Bomb Sounds
+$random Weapons/NBBounce { Weapons/NBBounce1 Weapons/NBBounce2 }
+Weapons/NBBounce1	DSNBBNC1
+Weapons/NBBounce2	DSNBBNC2
+Weapons/NailBomb	DSNBMBLC
+Weapons/NailBombExp	DSNBBEXP
+
+
+//NailBorg Sounds
+$random Monsters/NBSight { Monsters/NBSit1 Monsters/NBSit2 Monsters/NBSit3 }
+Monsters/NBSit1		DSNBSIT1
+Monsters/NBSit2		DSNBSIT2
+Monsters/NBSit3		DSNBSIT3
+
+$random Monsters/NBDeath { Monsters/NBDth1 Monsters/NBDth2 Monsters/NBDth3 }
+Monsters/NBDth1		DSNBDTH1
+Monsters/NBDth1		DSNBDTH2
+Monsters/NBDth1		DSNBDTH3
+
+Monsters/NBPain		DSNBPAIN
+Monsters/NBAct		DSNBSACT
+Monsters/NBWalk		DSNBWALK
