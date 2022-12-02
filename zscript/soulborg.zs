@@ -84,6 +84,17 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
             Stop;
         
         SoulBurst:
+            NLBC E 6 Aim();
+            NLBC E 4 A_StartSound("Monsters/NBSight");
+            NLBC F 3 SoulShot(0);
+            NLBC E 3;
+            NLBC F 3 SoulShot(1);
+            NLBC E 3;
+            NLBC F 3 SoulShot(2);
+            NLBC E 3;
+            NLBC F 3 SoulShot(3);
+            NLBC E 3 EndAttack();
+            Goto See;
 
     }
 }
