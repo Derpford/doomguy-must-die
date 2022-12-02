@@ -10,44 +10,58 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
         Radius 20;
         Height 56;
         Mass 120; // A little heavier than normal.
-        Speed 7; // And slightly slower...
+        Speed 10; // And slightly faster.
         PainChance 100; // Harder to flinch than normal.
+        SeeSound "Monsters/NBSight";
+        ActiveSound "Monsters/NBAct";
+        PainSound "Monsters/NBPain";
+        DeathSound "Monsters/NBDeath";
     }
 
     override State ChooseAttack() {
-        if (CheckLOF()) {
+        if (CheckLOF() && frandom(0,1) <= 0.3) {
             return ResolveState("SoulBurst");
-        } else if (totem) {
-            return ResolveState("SoulBurstTotem");
+        } else if (totem && totem.health > 0) {
+            totem.tracer = target;
+            if (Vec3To(totem).length() > 64 && totem.CheckLOF(CLOFF_SKIPFRIEND,ptr_target: AAPTR_TRACER)) {
+                return ResolveState("SoulBurstTotem");
+            } else {
+                return ResolveState(null); // Cancel the attack, it's not safe.
+            }
         } else {
             return ResolveState("TotemToss");
         }
     }
 
     void SoulShot(int count) {
-        double anglebase = 15.;
-        Vector2 spread = (5,5);
+        A_StartSound("imp/attack",1);
+        double anglebase = 10.0;
+        Vector2 spread = (5,2.5);
         Vector2 offs;
         SoulBall ball;
 
         switch (count) {
             case 0:
-                offs = (anglebase*2,0);
+                offs = (anglebase*2.0,0);
                 break;
             case 1:
                 offs = (anglebase,-anglebase);
                 break;
             case 2:
-                offs = (-anglebase,-anglebase);
+                offs = (-anglebase*2.0,0);
                 break;
             case 3:
-                offs = (-anglebase*2,0);
+                offs = (-anglebase,anglebase);
                 break;
         }
 
-        ball = SoulBall(Shoot("SoulBall",30,spread,offs));
+        ball = SoulBall(Shoot("SoulBall",25,spread,offs));
         ball.goal = (angle,pitch);
         
+    }
+
+    void ThrowTotem() {
+        totem = Shoot("SoulTotem",20,aoffs:(0,-10));
     }
 
     states {
@@ -57,6 +71,13 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
         
         See:
             NLBC ABCD 4 A_Chase();
+            NLBC A 0 {
+                if (frandom(0,1) <= 0.3) {
+                    return ResolveState("Missile");
+                } else {
+                    return ResolveState(null);
+                }
+            }
             Loop;
         
         Missile :
@@ -85,6 +106,7 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
         
         SoulBurst:
             NLBC E 6 Aim();
+        SoulBurstActual:
             NLBC E 4 A_StartSound("Monsters/NBSight");
             NLBC F 3 SoulShot(0);
             NLBC E 3;
@@ -96,6 +118,22 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
             NLBC E 3 EndAttack();
             Goto See;
 
+        TotemToss:
+            NLBC A 5 {
+                double aoffs = 45;
+                if (frandom(0,1) >= 0.5) {
+                    aoffs *= -1;
+                }
+                Aim(offs:(aoffs,0));
+            }
+            NLBC E 15 ThrowTotem(); 
+            NLBC E 5 EndAttack();
+            Goto See;
+
+        SoulBurstTotem:
+            NLBC E 6 A_Face(totem,0,0,flags:FAF_MIDDLE);
+            Goto SoulBurstActual;
+
     }
 }
 
@@ -104,24 +142,29 @@ class SoulBall : Actor {
     vector2 goal;
     default {
         Projectile;
+        Speed 20;
         DamageFunction (25);
         RenderStyle "Add";
     }
 
     void TurnGoal() {
+        double turnspeed = 1;
         double da = DeltaAngle(angle,goal.x);
         double dp = DeltaAngle(pitch,goal.y);
+        double aspeed = min(abs(da),turnspeed);
+        double pspeed = min(abs(dp),turnspeed);
         double asign = 0;
         double psign = 0;
         if (da != 0) {
-            double asign = da / abs(da);
+            asign = da / abs(da);
         }
         if (dp != 0) {
-            double psign = dp / abs(dp);
+            psign = dp / abs(dp);
         }
 
-        angle += min(da, 5*asign);
-        pitch += min(dp, 5*psign);
+        angle += aspeed * asign;
+        pitch += pspeed * psign;
+        Vel3DFromAngle(vel.length(),angle,pitch);
     }
 
     States {
@@ -131,6 +174,76 @@ class SoulBall : Actor {
 
         Death:
             SHBA CDEFGH 2;
+            TNT1 A -1;
+            Stop;
+    }
+}
+
+class SoulTotem : Actor {
+    // A freaky totem pole that radiates soul magic.
+    // It has a mystical connection to its owner.
+
+    int dmgcache; // How much damage has been taken? Every 25 damage, release a SoulBall.
+    // The target is decided by whose damage broke the threshold--i.e., if you last-hit it, it's your ball.
+    default {
+        // +SOLID;
+        +SHOOTABLE;
+        +NOTARGETSWITCH;
+        Health 100;
+        Radius 20;
+        Height 56;
+    }
+
+    void SpawnPuff() {
+        A_SpawnItemEX("SoulPuff",xofs:frandom(16,32),zofs:frandom(48,56),angle:frandom(0,360));
+    }
+
+    override int DamageMobj(Actor inf, Actor src, int dmg, Name mod, int flags, double ang) {
+        if (target && target.target) {
+            dmgcache += dmg;
+            while (dmgcache >= 25) {
+                if (src is "PlayerPawn" || src is "DoomPlayer") {
+                    // A player triggered this attack! Fire at our owner.
+                    A_Face(target,0,0,flags:FAF_MIDDLE);
+                    SoulBall ball = SoulBall(A_SpawnProjectile("SoulBall",angle:frandom(-20,20)));
+                    ball.goal = (angle,pitch);
+                } else {
+                    // Fire at our owner's target.
+                    tracer = target.target;
+                    A_Face(tracer,0,0,flags:FAF_MIDDLE);
+                    SoulBall ball = SoulBall(A_SpawnProjectile("SoulBall",angle:frandom(-20,20),ptr:AAPTR_TRACER));
+                    ball.goal = (angle,pitch);
+                }
+                dmgcache -= 25; // Consume the damage.
+            }
+        }
+
+        return super.DamageMobj(inf,src,dmg,mod,flags,ang);
+    }
+
+    states {
+        Spawn:
+            POL3 A 5 Bright;
+            POL3 B 5 Bright SpawnPuff();
+            Loop;
+        Death:
+            SHBA C 0 A_SetRenderStyle(1.0,STYLE_Add);
+            SHBA CDEFGHIJKL 3 Bright SpawnPuff();
+            TNT1 A -1 A_NoBlocking();
+            Stop;
+    }
+}
+
+class SoulPuff : Actor {
+    // A puff of soul energy.
+    default {
+        +NOINTERACTION;
+        RenderStyle "Add";
+    }
+
+    states {
+        Spawn:
+            SHGH ABCDEFG 3;
             TNT1 A -1;
             Stop;
     }
