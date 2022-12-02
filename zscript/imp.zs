@@ -19,6 +19,8 @@ class FlameImp : DMDMonster replaces DoomImp {
 		DeathSound "monster/hlndth";
 		ActiveSound "monster/hlnact";
         Tag "Flame Imp";
+        DropItem "HealthBonus";
+        DropItem "ArmorBonus";
     }
 
     override State ChooseAttack() {
