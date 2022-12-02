@@ -17,6 +17,15 @@ Pyropork grenade launcher sound credited to iD Software
 
 Soulborg projectile sprites credited to Vader
 
+Nailborg Commando credits file was missing, but here's what was on R667:
+	Submitted: Xim
+	Decorate: Mechadon, Xim (unused)
+	GLDEFs: Dreadopp
+	Sounds: Id Software (Quake)
+	Sprites: Id Software
+	Sprite Edit: Xim
+	Idea Base: Origonal Nailborg by Mechadon
+
 Terminator credits:
 	Code: Vader, Ghastly (ZScript conversion) (unused)
 	GLDefs: Dreadopp, Sandypaper (Brightmaps)
