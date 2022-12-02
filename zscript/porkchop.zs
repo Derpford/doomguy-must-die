@@ -22,6 +22,9 @@ class Porkchop : DMDMonster replaces Fatso {
         PainSound "PPork/Pai";
         DeathSound "PPork/Ded";
         Obituary "%o was incinerated by a Porkchop.";
+        DropItem "HealthBonus";
+        DropItem "HealthBonus";
+        DropItem "HealthBonus";
     }
 
     override State ChooseAttack() {
