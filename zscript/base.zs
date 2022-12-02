@@ -62,8 +62,8 @@ class DMDMonster : Actor abstract {
     // Returns an attack State to jump to.
     // Every enemy in this mod should have 2 or more attacks, ideally with unique tells!
 
-    action void Aim(double angle = 0, double pitch = 0, int flags = FAF_MIDDLE) {
-        A_FaceTarget(angle, pitch,flags:flags);
+    action void Aim(double angle = 0, double pitch = 0, int flags = FAF_MIDDLE, Vector2 offs = (0,0)) {
+        A_FaceTarget(angle, pitch,offs.x,offs.y,flags:flags);
     }
 
     action bool CanAttack() {
@@ -128,6 +128,8 @@ class DMDMonster : Actor abstract {
             if (speed == 0.0) {speed = it.speed;}
             double ang = invoker.angle+aoffs.x+frandom(-spread.x,spread.x);
             double pit = invoker.pitch+aoffs.y+frandom(-spread.y,spread.y);
+            // console.printf("Firing at %0.1f, %0.1f",ang,pit);
+            // console.printf("Angle and pitch %0.1f, %0.1f",invoker.angle, invoker.pitch);
             it.Vel3DFromAngle(speed,ang,pit);
             it.angle = ang;
             it.pitch = pit;
