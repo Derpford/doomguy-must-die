@@ -110,9 +110,15 @@ class SoulBall : Actor {
 
     void TurnGoal() {
         double da = DeltaAngle(angle,goal.x);
-        double asign = da / abs(da);
         double dp = DeltaAngle(pitch,goal.y);
-        double psign = dp / abs(dp);
+        double asign = 0;
+        double psign = 0;
+        if (da != 0) {
+            double asign = da / abs(da);
+        }
+        if (dp != 0) {
+            double psign = dp / abs(dp);
+        }
 
         angle += min(da, 5*asign);
         pitch += min(dp, 5*psign);
