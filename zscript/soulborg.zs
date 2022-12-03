@@ -187,7 +187,7 @@ class SoulTotem : Actor {
     // A freaky totem pole that radiates soul magic.
     // It has a mystical connection to its owner.
 
-    int dmgcache; // How much damage has been taken? Every 25 damage, release a SoulBall.
+    int dmgcache; // How much damage has been taken? Every 15 damage, release a SoulBall.
     // The target is decided by whose damage broke the threshold--i.e., if you last-hit it, it's your ball.
     default {
         // +SOLID;
@@ -205,7 +205,7 @@ class SoulTotem : Actor {
     override int DamageMobj(Actor inf, Actor src, int dmg, Name mod, int flags, double ang) {
         if (target && target.target) {
             dmgcache += dmg;
-            while (dmgcache >= 25) {
+            while (dmgcache >= 15) {
                 if (src is "PlayerPawn" || src is "DoomPlayer") {
                     // A player triggered this attack! Fire at our owner.
                     A_Face(target,0,0,flags:FAF_MIDDLE);
