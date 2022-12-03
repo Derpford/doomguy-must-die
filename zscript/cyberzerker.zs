@@ -49,7 +49,7 @@ class Cyberzerker : DMDMonster replaces Demon {
                 Vector3 dv = Vec3To(mo);
                 Vector3 dir = dv.unit();
                 Double dist = dv.length();
-                if (dist > 260 || (AbsAngle(AngleTo(mo),angle) < 70 && dist > 80)) {
+                if (dist > 160 || (AbsAngle(AngleTo(mo),angle) < 70 && dist > 80)) {
                     continue;
                     // Must be almost past the target to do damage.
                 } 
