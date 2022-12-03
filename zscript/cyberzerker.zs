@@ -139,7 +139,7 @@ class Cyberzerker : DMDMonster replaces Demon {
             Goto See;
         
         Death:
-            ZFOD H 4;
+            ZFOD H 4 ChargeEnd();
             ZFOD I 7 A_Scream();
             ZFOD J 6 A_NoBlocking();
             ZFOD KL 5;
@@ -147,6 +147,7 @@ class Cyberzerker : DMDMonster replaces Demon {
             ZFOD M -1;
             Stop;
         XDeath:
+            ZFOD H 2 ChargeEnd();
             ZFOD H 4 A_Scream();
             ZFOD N 4 A_XScream();
             ZFOD O 4 A_NoBlocking();
