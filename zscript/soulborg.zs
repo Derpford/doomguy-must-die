@@ -16,6 +16,10 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
         ActiveSound "Monsters/NBAct";
         PainSound "Monsters/NBPain";
         DeathSound "Monsters/NBDeath";
+        DropItem "Chaingun";
+        DropItem "Stimpack", 128;
+        DropItem "Clip", 128;
+        DropItem "HealthBonus", 192;
     }
 
     override State ChooseAttack() {
