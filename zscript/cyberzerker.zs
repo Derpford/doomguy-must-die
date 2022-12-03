@@ -131,6 +131,7 @@ class Cyberzerker : DMDMonster replaces Demon {
             Goto See;
 
         Pain:
+            ZFOD H 2 ChargeEnd();
             ZFOD H 4 A_Pain();
             ZFOD F 10 {
                 invoker.Thrust(20,invoker.angle-180);
