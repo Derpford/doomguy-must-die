@@ -136,33 +136,44 @@ class GruntBullet : Actor {
 
 class GruntNade : Actor {
     mixin RadiusPush;
+
+    actor shield;
+    int timer;
+
     default {
         // Projectile;
         +SHOOTABLE;
-        +SOLID;
         Height 10;
         Radius 10;
         Health 10;
-        -NOGRAVITY;
         Speed 25;
         // DamageFunction (5);
-        Obituary "%o got bonked by a grunt's concussion grenade. Humiliating.";
+        // Obituary "%o got bonked by a grunt's concussion grenade. Humiliating.";
     }
 
     override void Tick() {
         super.Tick();
-        ThinkerIterator it = ThinkerIterator.Create("PlayerPawn");
-        Actor mo;
-        while (mo = Actor(it.next())) {
-            if (Vec3To(mo).length() <= 128) {
-                self.A_Die();
-                break;
+        if (health > 0) {
+            if (shield) {
+                shield.Warp(self,zofs:32);
+                timer = 0;
+            } else {
+                timer += 1;
+                if (timer > 35) {
+                    SpawnShield();
+                }
             }
         }
     }
 
+    void SpawnShield() {
+        shield = Spawn("GruntShield",Vec3Offset(0,0,32));
+    }
+
     states {
         Spawn:
+            BOMB A 5 SpawnShield();
+        Beep:
             BOMB A 35 {
                 for (int i = 0; i < 360; i += 60) {
                     A_SpawnParticle("FF0000",SPF_FULLBRIGHT|SPF_RELPOS,15,8,i,8,zoff:12);
@@ -170,10 +181,49 @@ class GruntNade : Actor {
             }
             Loop;
         Death:
-            BOMB A 10;
-            PLSE A 0 RadiusPush(20,256,-15);
+            BOMB A 10 { invoker.shield.A_Die(); }
+            PLSE A 0 RadiusPush(10,256,-35);
             PLSE ABCDE 4 Bright;
             TNT1 A -1;
             Stop;
+    }
+}
+
+class GruntShield : Actor {
+    // A forcefield that absorbs attacks. You can walk through it, though.
+    default {
+        +SHOOTABLE;
+        +NOGRAVITY;
+        RenderStyle "Add";
+        Health 50;
+        Scale 3;
+        Radius 30;
+        Height 48;
+    }
+
+    void SpawnSparkles() {
+        A_SpawnItemEX("ShieldSparkle",30,angle:frandom(0,360));
+    }
+
+    states {
+        Spawn:
+            PLS2 AB 5 Bright SpawnSparkles();
+            Loop;
+        Death:
+            PLS2 CDE 3 Bright SpawnSparkles();
+            TNT1 A 0;
+            Stop;
+    }
+}
+
+class ShieldSparkle : Actor {
+    default {
+        +NOINTERACTION;
+    }
+
+    states {
+        PLS2 ABCDE 3 Bright;
+        TNT1 A 0;
+        Stop;
     }
 }
