@@ -211,7 +211,7 @@ class SmogCloud : Actor {
             RSMK ABCDE random(2,4) A_FadeOut(0.08);
             Loop;
         Death:
-            MISL BCD 6 Bright A_Explode(24,128,XF_NOTMISSILE|XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
+            MISL BCD 6 Bright A_Explode(4,128,XF_NOTMISSILE|XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
             TNT1 A -1;
             Stop;
     }
