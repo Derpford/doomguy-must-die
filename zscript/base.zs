@@ -29,6 +29,10 @@ mixin class RadiusPush {
                 continue;
             }
 
+            if (!CheckSight(mo)) {
+                continue;
+            }
+
             Vector3 dv = Vec3To(mo);
             Vector3 dir = dv.unit();
             Double dist = dv.length();
