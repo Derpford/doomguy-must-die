@@ -177,7 +177,7 @@ class SmogCanister : Actor {
             MISL B 8 Bright A_StartSound("weapons/rocklx");
             MISL C 7 Bright;
             MISL D 6 Bright;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }
@@ -212,7 +212,7 @@ class SmogCloud : Actor {
             Loop;
         Death:
             MISL BCD 6 Bright A_Explode(4,128,XF_NOTMISSILE|XF_EXPLICITDAMAGETYPE,false,128,damagetype:"Fire");
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }

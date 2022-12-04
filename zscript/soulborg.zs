@@ -178,7 +178,7 @@ class SoulBall : Actor {
 
         Death:
             SHBA CDEFGH 2;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }
@@ -257,7 +257,7 @@ class SoulTotem : Actor {
         Death:
             SHBA C 0 A_SetRenderStyle(1.0,STYLE_Add);
             SHBA CDEFGHIJKL 3 Bright SpawnPuff();
-            TNT1 A -1 A_NoBlocking();
+            TNT1 A 0 A_NoBlocking();
             Stop;
     }
 }
@@ -272,7 +272,7 @@ class SoulPuff : Actor {
     states {
         Spawn:
             SHGH ABCDEFG 3;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }

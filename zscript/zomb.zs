@@ -124,12 +124,12 @@ class GruntBullet : Actor {
         Death:
         Crash:
             PUFF ABCD 3;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
         
         XDeath:
             BLOD DCBA 4;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }
@@ -184,7 +184,7 @@ class GruntNade : Actor {
             BOMB A 10 { invoker.shield.A_Die(); }
             PLSE A 0 RadiusPush(10,256,-35);
             PLSE ABCDE 4 Bright;
-            TNT1 A -1;
+            TNT1 A 0;
             Stop;
     }
 }
