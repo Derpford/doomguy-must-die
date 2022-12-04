@@ -198,6 +198,30 @@ class SoulTotem : Actor {
         Height 56;
     }
 
+    override void Tick() {
+        Super.Tick();
+        if (!target || target.health <= 0) {
+            // Find a new target.
+            Actor mo;
+            Actor tgt;
+            ThinkerIterator it = ThinkerIterator.create("Actor");
+            while (mo = Actor(it.next())) {
+                if (!mo.bISMONSTER || mo.health <= 0) { continue; }
+                if (!tgt) { 
+                    tgt = mo;
+                } else {
+                    if (CheckIfCloser(mo,Vec3To(tgt).length(),true)) {
+                        tgt = mo;
+                    }
+                }
+            }
+
+            if (tgt) {
+                target = tgt;
+            }
+        }
+    }
+
     void SpawnPuff() {
         A_SpawnItemEX("SoulPuff",xofs:frandom(16,32),zofs:frandom(48,56),angle:frandom(0,360));
     }
