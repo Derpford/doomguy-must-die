@@ -75,13 +75,7 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
         
         See:
             NLBC ABCD 4 A_Chase();
-            NLBC A 0 {
-                if (frandom(0,1) <= 0.3) {
-                    return ResolveState("Missile");
-                } else {
-                    return ResolveState(null);
-                }
-            }
+            NLBC A 0 A_JumpIf(frandom(0,1) <= 0.3,"Missile");
             Loop;
         
         Missile :
