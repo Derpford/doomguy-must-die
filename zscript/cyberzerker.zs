@@ -170,3 +170,10 @@ class Cyberzerker : DMDMonster replaces Demon {
 
     }
 }
+
+class MadCyberzerker : Cyberzerker replaces Spectre {
+    // A more dangerous Cyberzerker that has less health.
+    default {
+        Health 75; // Always combos dash into uppercut!
+    }
+}
