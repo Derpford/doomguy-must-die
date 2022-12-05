@@ -92,7 +92,7 @@ class Porkchop : DMDMonster replaces Fatso {
             PPRK H 5 A_Scream();
             PPRK I 5 A_NoBlocking();
             PPRK JKLM 4;
-            PPRK M -1;
+            PPRK M -1 A_BossDeath();
             Stop;
     }
 }

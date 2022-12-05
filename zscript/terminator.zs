@@ -139,7 +139,7 @@ class Terminator : DMDMonster replaces Arachnotron {
             TERM R 4 Bright SpawnBits();
             TERM STU 4 Bright;
             TERM VWXYZ 4;
-            TERM "[" -1;
+            TERM "[" -1 A_BossDeath();
             Stop;
     }
 }
