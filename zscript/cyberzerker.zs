@@ -21,6 +21,9 @@ class Cyberzerker : DMDMonster replaces Demon {
 		DeathSound "demon/death";
 		ActiveSound "demon/active";
         Obituary "%o was butchered by the Cyberzerkers.";
+        DropItem "ArmorBonus";
+        DropItem "ArmorBonus";
+        DropItem "Stimpack",64;
     }
 
     override State ChooseAttack() {
