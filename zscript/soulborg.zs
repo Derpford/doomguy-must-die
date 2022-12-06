@@ -30,6 +30,7 @@ class SoulBorg : DMDMonster replaces ChaingunGuy {
             if (Vec3To(totem).length() > 64 && totem.CheckLOF(CLOFF_SKIPFRIEND,ptr_target: AAPTR_TRACER)) {
                 return ResolveState("SoulBurstTotem");
             } else {
+                EndAttack();
                 return ResolveState(null); // Cancel the attack, it's not safe.
             }
         } else {

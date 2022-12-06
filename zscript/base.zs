@@ -20,7 +20,16 @@ class DMDMonster : Actor abstract {
         A_FaceTarget(angle, pitch,offs.x,offs.y,flags:flags);
     }
 
+    override void Tick() {
+        Super.Tick();
+        bool debug = false;
+        if (debug && countinv("AttackToken") > 0) {
+            Console.printf("%s holding %d attacktokens",GetTag(),countinv("AttackToken"));
+        }
+    }
+
     action bool CanAttack() {
+        // Console.printf("%s attempting an attack against %s",invoker.GetTag(),invoker.target.GetTag());
         if (invoker.AttackTarget && invoker.AttackTarget != invoker) { // We already have an attack target!
             return true;
         }
@@ -48,9 +57,7 @@ class DMDMonster : Actor abstract {
     }
 
     override void Die(Actor src, Actor inf, int flags, Name type) {
-        if (AttackTarget && AttackTarget != self) {
-            AttackTarget.GiveInventory("AttackToken",CountInv("AttackToken"));
-        }
+        EndAttack();
         super.Die(src,inf,flags,type);
     }
 
@@ -64,6 +71,7 @@ class DMDMonster : Actor abstract {
 
     action void EndAttack() {
         // Give back the attack token we took.
+        // console.printf("%s giving an attack token back to %s",invoker.GetTag(),invoker.AttackTarget.GetTag());
         invoker.TakeInventory("AttackToken",1);
         if (invoker.AttackTarget && invoker.AttackTarget != self) {
             invoker.AttackTarget.GiveInventory("AttackToken",1);
