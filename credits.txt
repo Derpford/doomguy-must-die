@@ -31,3 +31,13 @@ Terminator credits:
 	GLDefs: Dreadopp, Sandypaper (Brightmaps)
 	Sounds: Id Software, Blizzard Entertainment, Vader
 	Sprites: Vader, Eriance (cannon base)
+
+Cheshire Caco credits:
+	Credits:
+	Submitted: zrrion the insect
+	Decorate: zrrion the insect (unused)
+	GLDefs: zrrion the insect (unused)
+	Sounds: zrrion the insect
+	Sprites: ID Software
+	Sprite Edit: zrrion the insect
+	Idea Base: Alice in Wonderland
