@@ -41,3 +41,11 @@ Cheshire Caco credits:
 	Sprites: ID Software
 	Sprite Edit: zrrion the insect
 	Idea Base: Alice in Wonderland
+	
+Hell Warrior credits:
+	Code: Vader, Tormentor667, Ghastly Dragon (ZScript conversion) (unused)
+	GLDefs: Ghastly Dragon, Sandypaper (Brightmaps) (unused)
+	Sounds: Id Software, Vader
+	Sprites: Id Software
+	Sprite Edit: Vader
+	Idea Base: Hell Warrior from Torment & Torture Episode 3
