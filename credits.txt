@@ -49,3 +49,11 @@ Hell Warrior credits:
 	Sprites: Id Software
 	Sprite Edit: Vader
 	Idea Base: Hell Warrior from Torment & Torture Episode 3
+	
+Hell Paladin credits:
+	Submitted: JohnCook1994
+	Code: Finalizer, Tormentor667, Vader, JohnCook1994 (unused)
+	GLDefs: JohnCook1994, Gothic (unused)
+	Sounds: Id Software, Raven Software
+	Sprites: Id Software, Raven Software, Wolfendoom, Amuscaria, Vader, HorrorMovieGuy, Finalizer
+	Idea Base: Cybruiser/Hell Warrior hybrid

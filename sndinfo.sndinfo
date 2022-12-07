@@ -98,3 +98,17 @@ $random ches/act { chesact1 chesact2 chesact3}
 ChesFire	chesfire
 ChesHit		cheshit
 ChesFlame	CHESFLME
+
+// Destroyer
+Paladin/Sight	HPALSIT
+Paladin/Active	HPALACT
+Paladin/Pain	HPALPAIN
+Paladin/Death	HPALDTH
+Paladin/Swing	HPALSWG
+Paladin/Melee	HPALHIT
+Paladin/Shoot	HPALATK
+Paladin/Hit		HPALHIT2
+Paladin/Grenade	HPALGREN
+Paladin/Bounce	HPALBNC
+Paladin/Explode	HPALEXPL
+Paladin/Step	HPALSTEP
