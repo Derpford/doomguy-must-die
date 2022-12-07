@@ -170,6 +170,12 @@ class GruntNade : Actor {
         shield = Spawn("GruntShield",Vec3Offset(0,0,32));
     }
 
+    void KillShield() {
+        if (shield) {
+            shield.A_Die();
+        }
+    }
+
     states {
         Spawn:
             BOMB A 5 SpawnShield();
@@ -181,7 +187,7 @@ class GruntNade : Actor {
             }
             Loop;
         Death:
-            BOMB A 10 { invoker.shield.A_Die(); }
+            BOMB A 10 KillShield();
             PLSE A 0 RadiusPush(10,256,-35);
             PLSE ABCDE 4 Bright;
             TNT1 A 0;
