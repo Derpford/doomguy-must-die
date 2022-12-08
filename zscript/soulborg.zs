@@ -233,9 +233,11 @@ class SoulTotem : Actor {
                 } else {
                     // Fire at our owner's target.
                     tracer = target.target;
-                    A_Face(tracer,0,0,flags:FAF_MIDDLE);
-                    SoulBall ball = SoulBall(A_SpawnProjectile("SoulBall",angle:frandom(-20,20),ptr:AAPTR_TRACER));
-                    ball.goal = (angle,pitch);
+                    if (tracer) {
+                        A_Face(tracer,0,0,flags:FAF_MIDDLE);
+                        SoulBall ball = SoulBall(A_SpawnProjectile("SoulBall",angle:frandom(-20,20),ptr:AAPTR_TRACER));
+                        ball.goal = (angle,pitch);
+                    }
                 }
                 dmgcache -= 25; // Consume the damage.
             }
