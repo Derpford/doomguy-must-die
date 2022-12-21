@@ -4,5 +4,8 @@ class Summoner : DMDMonster replaces ArchVile {
     // Grunt, Shotgunner, FlameImp, MadCyberzerker
     // 2. If there are at least five summon spots in play, it can summon a larger enemy:
     // Porkchop, Foofighter, Terminator
-    // 3. If it can't summon, it fires a ground-hugging fire wall at you, doing 64 splash damage when it hits something.
+    // 3. If it can't summon, it attempts to create a fire circle beneath your feet.
+    // It warps the circle to you as long as you're in line of sight.
+    // If you break line of sight for long enough (half a second?) the fire circle stops tracking entirely. Circle changes color to indicate this.
+    // The circle does 64 damage when it explodes, popping you into the air.
 }
