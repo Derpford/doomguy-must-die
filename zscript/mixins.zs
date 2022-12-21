@@ -54,16 +54,16 @@ mixin class RadiusPush {
 mixin class Shooter {
     // The shooty function.
 
-    action Actor Shoot(String what, double speed = 0.0, Vector2 spread = (0,0), Vector2 aoffs = (0,0), Vector2 poffs = (0,0)) {
+    action Actor Shoot(String what, double speed = 0.0, Vector2 spread = (0,0), Vector2 aoffs = (0,0), Vector2 poffs = (0,0), double foroffs = 0) {
         // Fire a projectile at our current angle and pitch.
         // No hitscans!
         let it = invoker.Spawn(what,invoker.pos);
         if (it) {
             it.target = invoker;
-            it.warp(invoker,it.radius,poffs.x,poffs.y,0,WARPF_NOCHECKPOSITION,heightoffset:0.5,radiusoffset:1.0);
             if (speed == 0.0) {speed = it.speed;}
             double ang = invoker.angle+aoffs.x+frandom(-spread.x,spread.x);
             double pit = invoker.pitch+aoffs.y+frandom(-spread.y,spread.y);
+            it.warp(invoker,it.speed+foroffs,poffs.x,poffs.y,ang,WARPF_NOCHECKPOSITION,heightoffset:0.5,radiusoffset:1.0,pitch:pit);
             // console.printf("Firing at %0.1f, %0.1f",ang,pit);
             // console.printf("Angle and pitch %0.1f, %0.1f",invoker.angle, invoker.pitch);
             it.Vel3DFromAngle(speed,ang,pit);
