@@ -112,3 +112,6 @@ Paladin/Grenade	HPALGREN
 Paladin/Bounce	HPALBNC
 Paladin/Explode	HPALEXPL
 Paladin/Step	HPALSTEP
+
+// hunter-killer
+hk/beep "sounds/hunter/missile-alert.wav"
