@@ -14,6 +14,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
         PainChance 128;
         +FLOAT;
         +NOGRAVITY;
+        +DONTFALL;
         +BRIGHT;
         SeeSound "ches/see";
         ActiveSound "ches/act";
