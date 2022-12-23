@@ -2,7 +2,9 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
     // Stronger than the base zombie, but not by much.
     // Has two attacks:
     // 1. Three-shot burst for 3x15 damage, total of 45. Yes, this means that the base zombie can kill you with 3 attacks.
-    // 2. Toss a concussion grenade that bounces everyone in a wide radius, including the guy who threw it.
+    // 2. Toss a force field that blocks projectiles. Shooting the projector bounces everyone in a wide radius.
+
+    actor grenade; // the shield
 
     default {
         Health 30; // Slightly harder to kill...
@@ -24,7 +26,7 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
 
     override State ChooseAttack() {
         double dist = Vec3To(target).length();
-        if (frandom(0,1) * dist >= 256) {
+        if (!grenade && frandom(0,1) * dist >= 256) {
             return ResolveState("Grenade");
         } else {
             return ResolveState("BurstShot");
@@ -38,7 +40,11 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
 
     void FireGrenade() {
         A_StartSound("player/male/fist");
-        A_SpawnItemEX("GruntNade",32,zofs:24,xvel:5,zvel:10);
+        bool err; Actor it;
+        [err, it] = A_SpawnItemEX("GruntNade",32,zofs:24,xvel:5,zvel:10);
+        if (err && it) {
+            grenade = it;
+        }
     }
 
     states {
