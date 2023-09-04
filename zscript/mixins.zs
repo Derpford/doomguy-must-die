@@ -1,6 +1,5 @@
-mixin class RadiusPush {
+extend class DMDMonster {
     // A handy function that tosses targets with the specified pitch in an AoE.
-
     void RadiusPush(double speed, double radius, double pitch) {
         ThinkerIterator it = ThinkerIterator.Create("Actor");
         Actor mo;
@@ -42,13 +41,14 @@ mixin class RadiusPush {
             } 
 
             // Now we spawn some zappy particles and do damage.
-            for(int i = 0; i < dist; i += random(3,6)) {
-                A_SpawnParticle("00FFFF",SPF_FULLBRIGHT,35,frandom(3,6),0,dir.x * i, dir.y * i, dir.z * i);
-            }
+            DrawLine(dv,"00FFFF",SPF_FULLBRIGHT);
             mo.DamageMobj(invoker,invoker,dmg,mod);
             mo.Vel3DFromAngle(speed,AngleTo(mo,true),pitch);
         }
     }
+}
+
+mixin class ParticleLines {
 }
 
 mixin class Shooter {

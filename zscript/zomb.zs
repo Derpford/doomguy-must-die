@@ -141,8 +141,6 @@ class GruntBullet : Actor {
 }
 
 class GruntNade : Actor {
-    mixin RadiusPush;
-
     actor shield;
     int timer;
 
@@ -194,7 +192,6 @@ class GruntNade : Actor {
             Loop;
         Death:
             BOMB A 10 KillShield();
-            PLSE A 0 RadiusPush(10,256,-35);
             PLSE ABCDE 4 Bright;
             TNT1 A 0;
             Stop;

@@ -1,11 +1,12 @@
 class Cyberzerker : DMDMonster replaces Demon {
-    mixin RadiusPush;
     // A demented zombie with some kind of zappy melee weapon strapped to its arm.
     // 1. Performs 3 dashes, doing 20 damage to anything it passes by and popping them into the air slightly.
     // 2. Charges briefly, then uppercuts for 40 damage, launching itself and everything nearby into the air.
     int dashcount;
     Array<Actor> hit;
     bool charging;
+    bool prepcharge;
+    bool prepupper;
 
     default {
         Health 150; // Roughly as healthy as the original.
@@ -34,9 +35,38 @@ class Cyberzerker : DMDMonster replaces Demon {
         }
     }
 
+    override void AttackPrep(State atk) {
+        if (atk.InStateSequence(ResolveState("Dash"))) {
+            prepcharge = true;
+        }
+
+        if (atk.InStateSequence(ResolveState("Uppercut")) || health <= 75) {
+            prepupper = true;
+        }
+    }
+
+    override void AttackFinish() {
+        prepcharge = false;
+        prepupper = false;
+    }
+
     override void Tick() {
         Super.Tick();
+        if (prepcharge) {
+            // Draw the warning ring.
+            for (double i = 0; i < 360; i += 30) {
+                A_SpawnParticle("FF0000",SPF_FULLBRIGHT|SPF_RELATIVE,1,16,i,90,0,height*0.5);
+            }
+        }
+
+        if (prepupper) {
+            // Larger warning ring.
+            for (double i = 0; i < 360; i += 30) {
+                A_SpawnParticle("FF0000",SPF_FULLBRIGHT|SPF_RELATIVE,1,16,i,120,0,height*0.5);
+            }
+        }
         if (charging) {
+            // First, draw a danger ring.
             // Grab all entities that are A) not on our list and B) within 260 units of this one.
             ThinkerIterator it = ThinkerIterator.Create("Actor");
             Actor mo;
@@ -56,14 +86,13 @@ class Cyberzerker : DMDMonster replaces Demon {
                 Vector3 dv = Vec3To(mo);
                 Vector3 dir = dv.unit();
                 Double dist = dv.length();
-                if (dist > 160 || (AbsAngle(AngleTo(mo),angle) < 70 && dist > 80)) {
+                if (dist > 90) {
                     continue;
-                    // Must be almost past the target to do damage.
                 } 
 
                 // Now we spawn some zappy particles and do damage.
                 for(int i = 0; i < dist; i += random(3,6)) {
-                    A_SpawnParticle("00FFFF",SPF_FULLBRIGHT,35,frandom(3,6),0,dir.x * i, dir.y * i, dir.z * i);
+                    A_SpawnParticle("00FFFF",SPF_FULLBRIGHT,35,frandom(3,6),0,dir.x * i, dir.y * i, (dir.z * i) + (height * 0.5));
                 }
                 mo.DamageMobj(self,self,20,"electric");
                 mo.Vel3DFromAngle(20,AngleTo(mo,true),-30);
@@ -82,7 +111,7 @@ class Cyberzerker : DMDMonster replaces Demon {
     }
 
     action void Uppercut() {
-        RadiusShock(20,260,-60,40,"electric");
+        RadiusShock(20,120,-60,40,"electric");
     }
 
     states {
@@ -118,7 +147,7 @@ class Cyberzerker : DMDMonster replaces Demon {
             ZFOD E 0 {
                 invoker.dashcount = 0;
             }
-            ZFOD F 6 A_JumpIf(health < 75,"Uppercut");
+            ZFOD F 6 A_JumpIf(health <= 75,"Uppercut");
             ZFOD E 3 EndAttack();
             Goto See;
         

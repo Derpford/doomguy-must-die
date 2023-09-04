@@ -16,8 +16,19 @@ class DMDMonster : Actor abstract {
     // Returns an attack State to jump to.
     // Every enemy in this mod should have 2 or more attacks, ideally with unique tells!
 
+    action void DrawLine(Vector3 dv, Color col, int flags, double lifetime = 35.0) {
+        // Draw a line along a given vector from our position.
+        Vector3 dir = dv.unit();
+        Double dist = dv.length();
+        for(int i = 0; i < dist; i += random(3,6)) {
+            A_SpawnParticle(col,flags,lifetime,frandom(3,6),0,dir.x * i, dir.y * i, (dir.z * i) + (height * 0.5));
+        }
+    }
+
+
     action void Aim(double angle = 0, double pitch = 0, int flags = FAF_MIDDLE, Vector2 offs = (0,0)) {
         A_FaceTarget(angle, pitch,offs.x,offs.y,flags:flags);
+        DrawLine(Vec3To(target),"FF0000",SPF_FULLBRIGHT,5.0);
     }
 
     override void Tick() {
@@ -62,14 +73,22 @@ class DMDMonster : Actor abstract {
     }
 
     action State StartAttack() {
+        State atk;
         if (target && CanAttack()) {
-            return invoker.ChooseAttack();
+            atk = invoker.ChooseAttack();
+            invoker.AttackPrep(atk);
         } else {
             return ResolveState(null);
         }
+        return atk;
+    }
+
+    virtual void AttackPrep(State attack) {
+        // Called after choosing an attack but before it actually happens.
     }
 
     action void EndAttack() {
+        invoker.AttackFinish();
         // Give back the attack token we took.
         // console.printf("%s giving an attack token back to %s",invoker.GetTag(),invoker.AttackTarget.GetTag());
         invoker.TakeInventory("AttackToken",1);
@@ -77,6 +96,10 @@ class DMDMonster : Actor abstract {
             invoker.AttackTarget.GiveInventory("AttackToken",1);
         }
         invoker.AttackTarget = invoker; // Clear our attack target.
+    }
+
+    virtual void AttackFinish() {
+        // Called after attacking is done, but before our target is cleared.
     }
 
 }
