@@ -203,6 +203,7 @@ class GruntShield : Actor {
     default {
         +SHOOTABLE;
         +NOGRAVITY;
+        +DONTTHRUST;
         RenderStyle "Add";
         Health 50;
         Scale 3;
