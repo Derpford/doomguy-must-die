@@ -252,9 +252,20 @@ class MBCPuff : BulletPuff {
         Obituary "%o was nuked by a terminator's microwave beam cannon.";
     }
 
+    action void SpawnGlow() {
+        double zofs = invoker.pos.z - invoker.floorz;
+        if (zofs <= 16) { // Only spawn the floor glow if it makes sense.
+            A_SpawnItemEX("MBCGlow",zofs:-zofs);
+        } else {
+            A_SpawnItemEX("MBCAirGlow");
+        }
+    }
+
     states {
         Spawn:
-            TNT1 AAAAAA 5 A_SpawnItemEX("HeatSmoke");
+            TNT1 A 0;
+            TNT1 A 5 SpawnGlow();
+            TNT1 AAAAA 5;
             BLST B 5 Bright;
             BLST C 5 Bright A_Explode(128);
             BLST C 0 Bright A_StartSound("weapons/hellex");
@@ -264,10 +275,38 @@ class MBCPuff : BulletPuff {
     }
 }
 
+class MBCGlow : Actor {
+    // Glowy effect on the ground.
+    default {
+        +NOINTERACTION;
+        +FLATSPRITE;
+        +BRIGHT;
+        Scale 3;
+        Alpha 0.5;
+        RenderStyle "Add";
+    }
+
+    states {
+        Spawn:
+            PLS2 BBBBBB 5 {
+                A_SpawnItemEX("HeatSmoke",zofs:8,zvel:4);
+                invoker.alpha += 0.1;
+            }
+            Stop;
+    }
+}
+
+class MBCAirGlow : MBCGlow {
+    default {
+        -FLATSPRITE; // Midair glow.
+    }
+}
+
 class HeatSmoke : Actor {
     default {
         +NOINTERACTION;
-        RenderStyle "Add";
+        RenderStyle "Translucent";
+        Alpha 0.5;
     }
 
     states {
