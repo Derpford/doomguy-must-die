@@ -59,11 +59,15 @@ mixin class Shooter {
         // No hitscans!
         let it = invoker.Spawn(what,invoker.pos);
         if (it) {
-            it.target = invoker;
+            if (invoker.bISMONSTER) {
+                it.target = invoker;
+            } else if (invoker.target) {
+                it.target = invoker.target;
+            }
             if (speed == 0.0) {speed = it.speed;}
             double ang = invoker.angle+aoffs.x+frandom(-spread.x,spread.x);
             double pit = invoker.pitch+aoffs.y+frandom(-spread.y,spread.y);
-            it.warp(invoker,it.speed+foroffs,poffs.x,poffs.y,ang,WARPF_NOCHECKPOSITION,heightoffset:0.5,radiusoffset:1.0,pitch:pit);
+            it.warp(invoker,it.speed+foroffs,poffs.x,poffs.y,ang,WARPF_NOCHECKPOSITION|WARPF_ABSOLUTEANGLE,heightoffset:0.5,radiusoffset:1.0,pitch:pit);
             // console.printf("Firing at %0.1f, %0.1f",ang,pit);
             // console.printf("Angle and pitch %0.1f, %0.1f",invoker.angle, invoker.pitch);
             it.Vel3DFromAngle(speed,ang,pit);
