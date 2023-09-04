@@ -60,7 +60,7 @@ class FlameImp : DMDMonster replaces DoomImp {
             Loop;
         
         See:
-            HELN ABCDEF 3 A_Chase();
+            HELN ABCDEF 3 A_Move();
             Loop;
         
         Missile:

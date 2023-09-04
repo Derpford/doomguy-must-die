@@ -92,7 +92,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
             Loop;
         
         See:
-            SLPS A 1 A_Chase();
+            SLPS A 1 A_Move();
             Loop;
         
         Missile:

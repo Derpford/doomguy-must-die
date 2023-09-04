@@ -53,7 +53,7 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
             Loop;
     
         See:
-            POSS ABCD 3 A_Chase();
+            POSS ABCD 3 A_Move();
             Loop;
         
         Missile:

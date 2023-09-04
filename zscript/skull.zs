@@ -60,7 +60,7 @@ class Skully : DMDMonster replaces LostSoul {
             Loop;
         
         See:
-            SKUL AABB 3 A_Chase();
+            SKUL AABB 3 A_Move();
             Loop;
         
         Missile:

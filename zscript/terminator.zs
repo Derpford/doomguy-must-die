@@ -80,12 +80,12 @@ class Terminator : DMDMonster replaces Arachnotron {
             Loop;
         
         See:
-            TERM A 5 A_Chase();
+            TERM A 5 A_Move();
             TERM A 10 A_StartSound("Terminator/terstepA",5);
-            TERM B 5 A_Chase();
-            TERM C 5 A_Chase();
+            TERM B 5 A_Move();
+            TERM C 5 A_Move();
             TERM C 10 A_StartSound("Terminator/terstepA",6);
-            TERM D 5 A_Chase();
+            TERM D 5 A_Move();
             Loop;
         
         Missile:

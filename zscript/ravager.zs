@@ -95,7 +95,7 @@ class HellRavager : DMDMonster replaces HellKnight {
             Loop;
         
         See:
-            HWAR ABCD 4 A_Chase();
+            HWAR ABCD 4 A_Move();
             Loop;
         
         Missile:
@@ -282,7 +282,7 @@ class HellDestroyer : HellRavager replaces BaronOfHell {
             Loop;
         
         See:
-            HPAL ABCD 4 A_Chase();
+            HPAL ABCD 4 A_Move();
             Loop;
         
         Missile:

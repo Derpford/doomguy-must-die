@@ -51,7 +51,7 @@ class HunterKiller : DMDMonster replaces Revenant {
             Loop;
         
         See:
-            SKEL AABBCCDDEEFF 1 A_Chase();
+            SKEL AABBCCDDEEFF 1 A_Move();
             Loop;
         
         Missile:

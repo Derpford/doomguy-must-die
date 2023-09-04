@@ -77,7 +77,7 @@ class ShotgunThug : DMDMonster replaces ShotgunGuy {
             Loop;
         
         See:
-            SPOS ABCD 3 A_Chase();
+            SPOS ABCD 3 A_Move();
             Loop;
         
         Missile:

@@ -1,6 +1,7 @@
 version "4.0"
 
 #include "zscript/base.zs"
+#include "zscript/move.zs"
 #include "zscript/mixins.zs"
 #include "zscript/event.zs"
 

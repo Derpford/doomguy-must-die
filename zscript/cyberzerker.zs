@@ -91,7 +91,7 @@ class Cyberzerker : DMDMonster replaces Demon {
             Loop;
         
         See:
-            ZFOD ABCD 3 A_Chase();
+            ZFOD ABCD 3 A_Move();
             Loop;
         
         Missile:

@@ -59,7 +59,7 @@ class Porkchop : DMDMonster replaces Fatso {
             Loop;
         
         See:
-            PPRK ABCD 3 A_Chase();
+            PPRK ABCD 3 A_Move();
             Loop;
         
         Missile:
