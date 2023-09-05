@@ -73,7 +73,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
     }
 
     override void AttackFinish() {
-        Thrust(-8,angle); // Get kicked back after attacks.
+        Thrust(-4,angle); // Get kicked back after attacks.
     }
 
     override void PostBeginPlay() {
@@ -84,7 +84,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
     override void Tick() {
         super.Tick();
         if (coreball) {
-            coreball.warp(self,-2,heightoffset:0.5);
+            coreball.warp(self,-2,flags:WARPF_NOCHECKPOSITION,heightoffset:0.5);
         }
     }
 
