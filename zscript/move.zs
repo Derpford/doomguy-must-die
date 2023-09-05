@@ -19,12 +19,17 @@ extend class DMDMonster {
 	double wiggleamp, wigglefreq;
 	Property Wiggle : wiggleamp, wigglefreq;
 
+    // How high off the ground do we want to be, if we have +FLOAT?
+    double idealheight;
+    Property IdealHeight : idealheight;
+
     default {
 		+SLIDESONWALLS;
         DMDMonster.TurnRate 5.;
 		DMDMonster.MWait 7,15;
 		DMDMonster.Wiggle 1, 1;
         DMDMonster.MaxTurn 45;
+        DMDMonster.IdealHeight 64;
         BloodColor "FC0330";
     }
 
@@ -355,6 +360,15 @@ extend class DMDMonster {
         double diff = abs(DeltaAngle(Normalize180(angle),Normalize180(goalang)));
         double mult = 180. / (180. + diff); // Should yield a value between 1 and 0.5, depending on how close to the goal angle it is.
         Thrust(truespd * mult,angle);
+        // If we can float, also adjust Z height.
+        if (bFLOAT) {
+            double h = pos.z - floorz;
+            if (h <= idealheight) {
+                vel.z += truespd;
+            } else if (h >= idealheight) {
+                vel.z -= truespd;
+            }
+        }
     }
 
 	double GetTrueSpd() {
