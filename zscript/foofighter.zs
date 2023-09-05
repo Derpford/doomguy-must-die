@@ -15,6 +15,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
         +FLOAT;
         +NOGRAVITY;
         +DONTFALL;
+        +DROPOFF;
         +BRIGHT;
         SeeSound "ches/see";
         ActiveSound "ches/act";
@@ -67,6 +68,14 @@ class FooFighter : DMDMonster replaces Cacodemon {
         }
     }
 
+    override void AttackPrep(State atk) {
+        vel = (0,0,0); // Cancel all velocity before firing.
+    }
+
+    override void AttackFinish() {
+        Thrust(-8,angle); // Get kicked back after attacks.
+    }
+
     override void PostBeginPlay() {
         super.PostBeginPlay();
         coreball = Spawn("FooCore",pos);
@@ -92,7 +101,7 @@ class FooFighter : DMDMonster replaces Cacodemon {
             Loop;
         
         See:
-            SLPS A 1 A_Move();
+            SLPS A 4 A_Move();
             Loop;
         
         Missile:
@@ -103,9 +112,10 @@ class FooFighter : DMDMonster replaces Cacodemon {
         Proliferation:
             SLPS B 10 Aim();
             SLPS CCCCC 2 ThrowSparks();
-            SLPS D 10 FirePro();
+            SLPS D 0 FirePro();
+            SLPS D 10 EndAttack(); 
             SLPS C 10;
-            SLPS B 10 EndAttack();
+            SLPS B 10; 
             Goto See;
 
         Beam:
@@ -119,8 +129,9 @@ class FooFighter : DMDMonster replaces Cacodemon {
             SLPS B 0 A_JumpIf(invoker.pitch <= 1, "BeamEnd");
             Loop;
         BeamEnd:
+            SLPS A 0 EndAttack();
             SLPS BBBBB 3 ThrowSparks();
-            SLPS A 10 EndAttack();
+            SLPS A 10;
             Goto See;
         
         Pain:
