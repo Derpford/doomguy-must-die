@@ -310,13 +310,14 @@ extend class DMDMonster {
 				// NewChaseDir();
                 Turn();
 			}
-			if (CheckValidMove(truespd)) {
+			if (CheckValidMove(vel.length() + radius)) {
 				Step(truespd);
 			} else {
 				// Turn();
 				double newang = (180 + frandom(-30,30));
-				// angle += newang;
+				angle += newang;
 				goalang += newang;
+                vel = (0,0,vel.z);
 			}
 			// if the move was illegal, reset it 
 			// (copied from A_SerpentChase - it applies to everything with CANTLEAVEFLOORPIC!)
@@ -351,7 +352,9 @@ extend class DMDMonster {
 
     void Step(double truespd) {
         // Move a single step in our current facing dir.
-        Thrust(truespd,angle);
+        double diff = abs(DeltaAngle(Normalize180(angle),Normalize180(goalang)));
+        double mult = 180. / (180. + diff); // Should yield a value between 1 and 0.5, depending on how close to the goal angle it is.
+        Thrust(truespd * mult,angle);
     }
 
 	double GetTrueSpd() {
@@ -402,8 +405,7 @@ extend class DMDMonster {
 		FCheckPosition info;
 		bool res = CheckPosition(nextpos,false,info);
 		if (res) {
-			if (pos.z - info.floorz > MaxDropOffHeight) { res = false; }
-			if (info.floorz - pos.z > MaxStepHeight) { res = false; } // TODO: Implement stepping
+			if (!bDROPOFF && pos.z - info.floorz > MaxDropOffHeight) { res = false; }
 		}
 
 		return res;
