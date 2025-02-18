@@ -7,6 +7,8 @@ class Terminator : DMDMonster replaces Arachnotron {
     int starwait;
     int mbcwait; // The Terminator must perform X attacks before it can use the Plasma Star or MBC again.
 
+    double bracketangle; // the angle offset for bracketing fire with the MG.
+
     default {
         Health 500;
         Radius 56;
@@ -69,9 +71,18 @@ class Terminator : DMDMonster replaces Arachnotron {
         A_CustomRailgun(0,-16,"FF0000","FF4444",RGF_EXPLICITANGLE|RGF_SILENT|RGF_NORANDOMPUFFZ,0,0,"MBCPuff",offs.x,offs.y);
     }
 
+    void SetupGuns() {
+        bracketangle = 20;
+        if (frandom(0,1) > 0.5) {
+            bracketangle *= -1;
+        }
+    }
+
     void FireGuns() {
         A_StartSound("Terminator/tershotB");
-        Shoot("GruntBullet",poffs:(-16,0));
+        if (bracketangle > 0) {bracketangle--;}
+        if (bracketangle < 0) {bracketangle++;}
+        LineShoot("GruntBullet",4,12,poffs:((-16,0)));
     }
     
     states {
@@ -113,12 +124,13 @@ class Terminator : DMDMonster replaces Arachnotron {
             Goto See;
         
         Guns:
-            TERM G 10 Aim();
+            TERM G 0 SetupGuns();
+            TERM G 10 Aim(offs:(bracketangle,0));
         GunsFire:
             TERM H 1 Bright FireGuns();
             TERM I 1 Bright;
-            TERM G 1 Aim(10,5);
-            TERM G 0 A_JumpIf((frandom(0,1) <= 0.1), "GunsEnd");
+            TERM G 1 Aim(10+abs(bracketangle),5,offs:(bracketangle,0));
+            TERM G 0 A_JumpIf((frandom(1,abs(bracketangle)) <= 0.1), "GunsEnd");
             Loop;
         GunsEnd:
             TERM G 10 EndAttack();
