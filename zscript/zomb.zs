@@ -1,7 +1,7 @@
 class ZombieGrunt : DMDMonster replaces ZombieMan {
     // Stronger than the base zombie, but not by much.
     // Has two attacks:
-    // 1. Three-shot burst for 3x15 damage, total of 45. Yes, this means that the base zombie can kill you with 3 attacks.
+    // 1. Three-shot burst, each shot firing 4x5dmg lasers, total of 60. Yes, this means that the base zombie can kill you with 2 attacks.
     // 2. Toss a force field that blocks projectiles. Shooting the projector bounces everyone in a wide radius.
 
     actor grenade; // the shield
@@ -34,8 +34,7 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
     }
 
     void FireBullet() {
-        A_StartSound("grunt/attack");
-        Shoot("GruntBullet");
+        LineShoot("GruntBullet",4,12);
     }
 
     void FireGrenade() {
@@ -65,10 +64,13 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
             POSS E 4 Aim();
             POSS EEEEE 2 Aim(3,5);
             POSS E 4;
+            POSS F 0 A_StartSound("grunt/attack");
             POSS F 4 Bright FireBullet();
             POSS E 2;
+            POSS F 0 A_StartSound("grunt/attack");
             POSS F 4 Bright FireBullet();
             POSS E 2;
+            POSS F 0 A_StartSound("grunt/attack");
             POSS F 4 Bright FireBullet();
             POSS E 10 EndAttack();
             Goto See;
@@ -112,24 +114,26 @@ class ZombieGrunt : DMDMonster replaces ZombieMan {
 }
 
 class GruntBullet : Actor {
-    mixin ParticleTracer;
+    // mixin ParticleTracer;
     default {
+        +BRIGHT;
+        RenderStyle "Add";
         Projectile;
-        Speed 40;
+        Speed 25;
         Radius 2;
         Height 4;
-        DamageFunction (15);
+        DamageFunction (5);
         Obituary "%o underestimated a grunt.";
         Decal "BulletChip";
     }
 
     states {
         Spawn:
-            TNT1 A 1 SpawnTrail(6,16,"FFFF00");
-            Loop;
+            BLTZ A -1;
+
         Death:
         Crash:
-            PUFF ABCD 3;
+            POPR ABCDE 2;
             TNT1 A 0;
             Stop;
         
