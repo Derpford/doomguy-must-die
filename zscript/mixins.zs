@@ -54,7 +54,7 @@ mixin class ParticleLines {
 mixin class Shooter {
     // The shooty function.
 
-    action Actor Shoot(String what, double speed = 0.0, Vector2 spread = (0,0), Vector2 aoffs = (0,0), Vector2 poffs = (0,0), double foroffs = 0) {
+    action Actor Shoot(String what, double speed = 0.0, Vector2 spread = (0,0), Vector2 aoffs = (0,0), Vector2 poffs = (0,0), double foroffs = 0, bool heightoffs = true) {
         // Fire a projectile at our current angle and pitch.
         // No hitscans!
         let it = invoker.Spawn(what,invoker.pos);
@@ -67,7 +67,9 @@ mixin class Shooter {
             if (speed == 0.0) {speed = it.speed;}
             double ang = invoker.angle+aoffs.x+frandom(-spread.x,spread.x);
             double pit = invoker.pitch+aoffs.y+frandom(-spread.y,spread.y);
-            it.warp(invoker,it.speed+foroffs,poffs.x,poffs.y,ang,WARPF_NOCHECKPOSITION|WARPF_ABSOLUTEANGLE,heightoffset:0.5,radiusoffset:1.0,pitch:pit);
+            double hoff = 0.5;
+            if (!heightoffs) { hoff = 0; }
+            it.warp(invoker,it.speed+foroffs,poffs.x,poffs.y,ang,WARPF_NOCHECKPOSITION|WARPF_ABSOLUTEANGLE,heightoffset:hoff,radiusoffset:1.0,pitch:pit);
             // console.printf("Firing at %0.1f, %0.1f",ang,pit);
             // console.printf("Angle and pitch %0.1f, %0.1f",invoker.angle, invoker.pitch);
             it.Vel3DFromAngle(speed,ang,pit);
@@ -75,6 +77,12 @@ mixin class Shooter {
             it.pitch = pit;
         }
         return it;
+    }
+
+    action void LineShoot (String what, int count, double spacing, double speed = 0.0, Vector2 spread = (0,0), Vector2 aoffs = (0,0), Vector2 poffs = (0,0), double foroffs = 0) {
+        for (int i = 0; i < count; i++) {
+            Shoot(what,speed,spread,aoffs,poffs,foroffs + spacing * i);
+        }
     }
 }
 
@@ -106,6 +114,18 @@ mixin class FallingDebris {
         } else if (crashed && pos.z != floorz) {
             SetState(ResolveState("Spawn"));
             crashed = false;
+        }
+    }
+}
+
+mixin class Countdown {
+    action bool CountdownEX() {
+        // returns true if countdown is over
+        invoker.reactiontime--;
+        if (invoker.reactiontime <= 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
