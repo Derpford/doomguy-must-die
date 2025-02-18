@@ -193,6 +193,15 @@ class FooSparkle : Actor {
     }
 }
 
+class FooSparkle2 : FooSparkle { 
+    states {
+        Spawn:
+            SHST ABCGHIJKL 3;
+            TNT1 A 0;
+            Stop;
+    }
+}
+
 class FooFire : FooSparkle {
     default {
         RenderStyle "Normal";
@@ -230,6 +239,9 @@ class FooBeam : Actor {
     mixin Shooter;
     default {
         Projectile;
+        Scale 1.5;
+        Radius 8;
+        Height 8;
         +BRIGHT;
         DamageFunction (10);
         Obituary "%o let a foo fighter get the best of %h.";
@@ -241,16 +253,19 @@ class FooBeam : Actor {
         double y = cos(age) * 5;
         Shoot("FooSparkle",-5,aoffs:(x,y));
         Shoot("FooSparkle",-5,aoffs:(-x,-y));
+        Shoot("FooSparkle2",-5);
         A_StartSound("ChesFlame");
     }
 
     states {
         Spawn:
-            SHST AB 3;
-            SHST C 3 SpawnSparks();
+            BLRE ABC 2;
+        Fly:
+            BLRE C 3;
+            BLRE F 0 SpawnSparks();
             Loop;
         Death:
-            SHST GHIJKL 3;
+            POPR ABCDE 3;
             TNT1 A 0;
             Stop;
     }
@@ -265,28 +280,31 @@ class FooProliferator : Actor {
     default {
         Projectile;
         DamageFunction (5);
-        RenderStyle "Add";
+        // RenderStyle "Add";
         +BRIGHT;
         Obituary "%o was fried from an everlong way away.";
     }
 
     void SpawnAdd() {
-        float range = 3 + adds;
-        Vector2 offs = (frandom(-range,range),frandom(-range,range));
-        Vector2 angles = (frandom(-5,5),frandom(-5,5));
+        float range = 8 + adds;
+        // Vector2 offs = (frandom(-range,range),frandom(-range,range)) + (0,-height/2);
+        Vector2 offs = (cos(GetAge())*range,sin(GetAge())*range);
+        // Vector2 angles = (frandom(-5,5),frandom(-5,5));
         double spd = frandom(4,6);
-        Shoot("FooAdd",spd,aoffs:angles,poffs:offs);
-        Shoot("FooSparkle",-spd,aoffs:angles,poffs:offs);
+        Shoot("FooAdd",spd,poffs:offs,heightoffs:false);
+        Shoot("FooAdd",spd,poffs:-offs,heightoffs:false);
+        Shoot("FooFire",-spd,poffs:offs,heightoffs:false);
+        Shoot("FooFire",-spd,poffs:-offs,heightoffs:false);
         adds += 0.3;
     }
 
     states {
         Spawn:
-            BAL2 AB 4;
-            BAL2 B 0 SpawnAdd();
+            BLR4 ABC 4;
+            BLR4 A 0 SpawnAdd();
             Loop;
         Death:
-            BAL2 CDE 5;
+            BLRE ABCDE 5;
             TNT1 A 0;
             Stop;
     }
@@ -296,7 +314,7 @@ class FooAdd : FooProliferator {
     // Just like FooProliferator, but without proliferation.
     states {
         Spawn:
-            BAL2 AB 4;
+            BLR2 ABCD 4;
             Loop;
     }
 }
