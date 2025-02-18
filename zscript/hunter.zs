@@ -32,7 +32,7 @@ class HunterKiller : DMDMonster replaces Revenant {
     void FireArty() {
         // TODO: Spawn artillery strikes around the player.
         A_StartSound("weapons/rocklf");
-        Shoot("RocketExhaust",3);
+        Shoot("RocketSpark",3);
         target.A_SpawnItemEX("ArtyMarker",frandom(64,256),angle:frandom(0,360));
     }
 
@@ -98,7 +98,8 @@ class HunterKiller : DMDMonster replaces Revenant {
 
 class HomingRocket : Actor {
     mixin Shooter;
-    bool stage; // Is it time to accelerate?
+    int stage; // Is it time to accelerate?
+    const stageswitch = 10;
     default {
         Projectile;
         +SEEKERMISSILE;
@@ -106,7 +107,7 @@ class HomingRocket : Actor {
     }
 
     void Seek() {
-        if (tracer && tracer.health > 0 && !stage) {
+        if (tracer && tracer.health > 0 && stage < stageswitch) {
             double spread = 7.;
             A_StartSound("hk/beep",1,CHANF_NOSTOP);
             // A_SeekerMissile(0,10,SMF_CURSPEED|SMF_PRECISE);
@@ -119,20 +120,25 @@ class HomingRocket : Actor {
             angle += da;
             pitch += dp;
             Vel3DFromAngle(vel.length(),angle,pitch);
-            Shoot("RocketExhaust",-10);
-            if (Vec3To(tracer).length() < 192) {
-                stage = true;
+            double ato = abs(angleto(tracer) - angle);
+            if (ato < 5 || ato > 90) {
+                stage++;
+            }
+            Shoot("RocketSpark",-10);
+        } else {
+            if (stage == stageswitch) {
                 A_StopSound(1);
                 A_StartSound("fatso/attack");
+                Shoot("RocketExhaust",-10);
+                stage++;
             }
-        } else {
-            vel = vel.unit() * (vel.length() + 5);
+            vel = vel.unit() * (vel.length() + 1);
         }
     }
 
     states {
         Spawn:
-            DART A 3 Seek();
+            FATB AB 3 Seek();
             Loop;
         
         Death:
@@ -152,15 +158,40 @@ class RocketExhaust : Actor {
 
     states {
         Spawn:
+            // TNT1 A 5;
+            // HLBL CDEFGHIJKLMN 3;
+            BLRE EDCBA 3;
+            BLRE ABCDE 2;
+            TNT1 A 0;
+            Stop;
+    }
+}
+
+class RocketSpark : Actor {
+    default {
+        +NOINTERACTION;
+        RenderStyle "Add";
+        +BRIGHT;
+        Scale 0.5;
+    }
+
+    states {
+        Spawn:
             TNT1 A 5;
-            HLBL CDEFGHIJKLMN 3;
+        Fly:
+            // HLBL CDEFGHIJKLMN 3;
+            BLR2 ABCD 1 A_FadeOut(0.15);
+            Loop;
+        Death:
             TNT1 A 0;
             Stop;
     }
 }
 
 class ArtyMarker : Actor {
-    default {}
+    default {
+        +NOGRAVITY;
+    }
     double timer;
 
     void Ring(double rad) {
@@ -200,6 +231,7 @@ class ArtyMarker : Actor {
         
         Death:
             MISL B 0 A_StartSound("weapons/rocklx");
+            MISL B 0 { vel.z = 8; }
             MISL B 5 A_Explode(80);
             MISL CD 5;
             TNT1 A 0;
