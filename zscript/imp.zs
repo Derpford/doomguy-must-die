@@ -25,7 +25,10 @@ class FlameImp : DMDMonster replaces DoomImp {
 
     override State ChooseAttack() {
         if (random(0,60) >= health) {
-            if (ball1 || ball2 || ball3) {
+            if ((ball1 && ball1.reactiontime > 0) || 
+                (ball2 && ball2.reactiontime > 0) || 
+                (ball3 && ball3.reactiontime > 0)) {
+                // We have orbiters still
                 return ResolveState("Lunge");
             } Else {
                 return ResolveState("FireOrbit");
@@ -153,6 +156,7 @@ class ImpFireball : Actor {
     }
 
     default {
+        +BRIGHT;
         Speed 15;
         DamageFunction (20);
         Projectile;
@@ -169,15 +173,16 @@ class ImpFireball : Actor {
             Loop;
         
         Death:
-            HLBL C 1 Bright A_StartSound("imp/shotx");
-            HLBL DEFGHI 1 Bright;
-            HLBL JKLMN 2 Bright;
+            HLBL C 1 A_StartSound("imp/shotx");
+            HLBL DEFGHI 1;
+            HLBL JKLMN 2;
             Stop;
     }
 }
 
 class ImpOrball : ImpFireball {
     // This one's on a timer!
+    mixin Countdown;
     default {
         ReactionTime 175;
     }
@@ -185,7 +190,8 @@ class ImpOrball : ImpFireball {
     override void Tick() {
         Super.Tick();
         if(InStateSequence(curstate,ResolveState("Spawn"))) {
-            if(target) {
+            CountdownEX();
+            if(reactiontime > 0 && target && target.health > 0) {
                 // Orbit our owner!
                 angle += 5;
                 VelFromAngle(1,angle+90);
@@ -201,9 +207,13 @@ class ImpOrball : ImpFireball {
     states {
         Spawn:
             HLBL AAABBB 1 {
-                A_CountDown();
                 Smoke();
             }
+            Loop;
+        Fly:
+            HLBL A 0 VelFromAngle(speed,angle);
+        FlyLoop:
+            HLBL AB 3;
             Loop;
         Death:
             HLBL C 1 Bright A_StartSound("imp/shotx");
