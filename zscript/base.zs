@@ -26,9 +26,17 @@ class DMDMonster : Actor abstract {
     }
 
 
-    action void Aim(double angle = 0, double pitch = 0, int flags = FAF_MIDDLE, Vector2 offs = (0,0)) {
-        A_FaceTarget(angle, pitch,offs.x,offs.y,flags:flags);
-        DrawLine(Vec3To(target),"FF0000",SPF_FULLBRIGHT,5.0);
+    action void Aim(double ang = 0, double pit = 0, int flags = FAF_MIDDLE, Vector2 offs = (0,0)) {
+        if (!target) { return; } // Don't change anything if there's no target to aim at.
+        if (target.bSHADOW) {
+            target = target.Spawn("ShadowClone",target.pos - (15 * target.vel));
+        }
+        A_FaceTarget(ang, pit,offs.x,offs.y,flags:flags);
+        FLineTraceData d;
+        double dist = Vec3To(target).length();
+        LineTrace(angle,dist,pitch,offsetz: height/2,data: d);
+        vector3 v = Level.Vec3Diff(invoker.pos+(0,0,height/2),d.HitLocation);
+        DrawLine(v,"FF0000",SPF_FULLBRIGHT,5.0);
     }
 
     override void Tick() {
@@ -95,6 +103,10 @@ class DMDMonster : Actor abstract {
         if (invoker.AttackTarget && invoker.AttackTarget != self) {
             invoker.AttackTarget.GiveInventory("AttackToken",1);
         }
+        if (!target || (target != invoker.AttackTarget && target is "ShadowClone")) {
+            // Our target changed, probably because of a ShadowClone. Reset it.
+            target = invoker.AttackTarget;
+        }
         invoker.AttackTarget = invoker; // Clear our attack target.
     }
 
@@ -126,5 +138,20 @@ class HeavenAndHell : Inventory {
     default {
         Inventory.Amount 1;
         Inventory.MaxAmount 1;
+    }
+}
+
+class ShadowClone: Actor {
+    // An invisible actor that remains for about a second, so monsters will target the last spot they 'saw' you in.
+    default {
+        Radius 16;
+        Height 56;
+    }
+    states {
+        Spawn:
+            TNT1 A 35;
+        Death:
+            TNT1 A 1 A_Remove(AAPTR_DEFAULT);
+            Stop;
     }
 }
