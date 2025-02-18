@@ -16,6 +16,7 @@ class Cyberzerker : DMDMonster replaces Demon {
         Mass 200; // It's not as heavy as the original.
         PainChance 180;
         +FLOORCLIP;
+        +DROPOFF;
         SeeSound "demon/sight";
 		AttackSound "demon/melee";
 		PainSound "demon/pain";
