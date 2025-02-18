@@ -156,15 +156,45 @@ class BuckPellet : GruntBullet {
 
     states {
         Spawn:
-            TNT1 A 1 {
-                SpawnTrail(8,12,"FFCC00");
+            BLR1 A 1 {
+                // SpawnTrail(8,12,"FFCC00");
                 A_CountDown();
             }
+            Loop;
+        
+        Death:
+            BLRE ABCDEF 2;
+            Stop;
     }
 }
 
 class SlugPellet : GruntBullet {
     default {
         DamageFunction (40);
+    }
+
+    action void SpawnSparks() {
+        vector2 dir = (frandom(-1,1),frandom(-1,1)).unit();
+        double dist = frandom(1,5);
+        A_SpawnItemEX("SlugSpark",yofs:dir.x*dist,zofs:dir.y*dist,yvel:dir.x*(5-dist),zvel:dir.y*(5-dist));
+    }
+
+    states {
+        Spawn:
+            BLR5 ABCD 3 SpawnSparks();
+            Loop;
+    }
+}
+
+class SlugSpark: Actor {
+    default {
+        +NOINTERACTION;
+        Scale 0.5;
+    }
+
+    states {
+        Spawn:
+            BLRE ABCDEF 2;
+            Stop;
     }
 }
