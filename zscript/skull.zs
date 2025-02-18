@@ -136,13 +136,29 @@ class SkullyFire : Actor {
 
     states {
         Spawn:
-            FYR2 AAAABBBB 1 FireDrift();
+            BLR2 AABBCCDD 1 FireDrift();
+            BLR2 A 0 A_SpawnItemEX("FirePuff",zofs:8);
             Loop;
         
         Death:
+            CHFR A 0 { vel.z = 2; }
             CHFR A 3 A_StartSound("Weapons/NailBomb");
             CHFR BCDEFGHIJKLMNOP 3;
             TNT1 A 0;
+            Stop;
+    }
+}
+
+class FirePuff : Actor {
+    default {
+        +NOINTERACTION;
+        +BRIGHT;
+    }
+
+    states {
+        Spawn:
+            BLB1 A 6;
+            BLBE ABCDE 2;
             Stop;
     }
 }
